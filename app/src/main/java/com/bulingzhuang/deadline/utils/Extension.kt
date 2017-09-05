@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.bulingzhuang.deadline.BuildConfig
 import com.bulingzhuang.deadline.R
+import com.bulingzhuang.deadline.utils.db.DBUtil
 
 /**
  * Created by bulingzhuang
@@ -41,3 +42,5 @@ fun showLogE(msg: String,tag: String = "BLZ") {
         Log.e(tag, msg)
     }
 }
+
+val Context.database: DBUtil get() = DBUtil.getInstance(this.applicationContext)

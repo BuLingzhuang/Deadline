@@ -40,7 +40,6 @@
                     android:id="@+id/iv_weather"
                     android:layout_width="44dp"
                     android:layout_height="44dp"
-                    android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="44dp"
                     app:srcCompat="@drawable/ic_sun"/>
@@ -51,11 +50,9 @@
                     android:layout_height="44dp"
                     android:layout_marginTop="44dp"
                     app:textSize="28sp"
-                    android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     app:textColor="@color/colorPrimary"
-                    android:layout_toEndOf="@id/iv_weather"
-                    android:layout_toRightOf="@id/iv_weather"/>
+                    android:layout_toEndOf="@id/iv_weather"/>
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar

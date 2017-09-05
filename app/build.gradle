@@ -9,7 +9,7 @@ android {
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.bulingzhuang.deadline"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -34,6 +34,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.0'
     implementation 'com.android.support:cardview-v7:26.0.1'
+    //db
+    compile "org.jetbrains.anko:anko-sqlite:$anko_version"
     //net
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"

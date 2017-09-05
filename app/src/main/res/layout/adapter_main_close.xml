@@ -8,10 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="6dp"
-        android:foreground="?attr/selectableItemBackground"
+        android:background="?android:attr/selectableItemBackground"
         app:cardCornerRadius="2.33dp"
         app:cardElevation="1dp">
 
@@ -20,55 +20,56 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:gravity="center_vertical"
             android:paddingTop="10dp">
 
             <com.bulingzhuang.deadline.views.ui.CircleProgressView
-                android:id="@+id/cpv_content"
+                android:id="@+id/cpv_day"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:layout_centerInParent="true"
                 app:circleColorE="@color/amber500"
                 app:circleColorS="@color/red500"
                 app:currentNum="230"
                 app:fillNum="360"/>
             <TextView
+                android:id="@+id/tv_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pingfang_light"
-                android:text="26d"
+                android:textStyle="bold"
                 android:textColor="@color/colorPrimary"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:textSize="16sp"
                 />
             <com.bulingzhuang.deadline.views.ui.CircleProgressView
-                android:id="@+id/cpv_content2"
+                android:id="@+id/cpv_hour"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:layout_centerInParent="true"
                 app:circleColorE="@color/amber500"
                 app:circleColorS="@color/red500"
                 app:currentNum="90"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 app:fillNum="360"/>
             <TextView
+                android:id="@+id/tv_hour"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pingfang_light"
-                android:text="8h"
+                android:textStyle="bold"
                 android:textColor="@color/colorPrimary"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:textSize="16sp"
                 />
             <TextView
+                android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pingfang_light"
                 android:textColor="@color/red500"
-                android:text="距离十一放假"
+                android:textStyle="bold"
                 android:textSize="16sp"
                 />
         </LinearLayout>

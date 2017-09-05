@@ -1,7 +1,7 @@
 package com.bulingzhuang.deadline.interfaces.presenters
 
 import android.content.Context
-import com.bulingzhuang.deadline.interfaces.views.MainView
+import android.support.v7.widget.RecyclerView
 
 /**
  * Created by bulingzhuang
@@ -13,6 +13,13 @@ interface MainPresenter {
      * 获取天气数据
      */
     fun getWeatherData(context: Context)
+
+    /**
+     * 初始化Adapter
+     */
+    fun initAdapter(context: Context,recyclerView: RecyclerView)
+
+    fun insertItem(context: Context,str:String)
 
     /**
      * 销毁页面操作

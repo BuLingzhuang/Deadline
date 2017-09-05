@@ -4,6 +4,10 @@
     <color name="colorPrimaryDark">#263238</color>
     <color name="colorAccent">#FF4081</color>
 
+    <!--资深原画推荐-->
+
+    <color name="hu_green">#21e700</color>
+
     <!--Google推荐-->
 
     <color name="red50">#fde0dc</color>

@@ -5,14 +5,20 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.bulingzhuang.deadline.R
+import com.bulingzhuang.deadline.bean.DeadlineModel
 import com.bulingzhuang.deadline.bean.WeatherModel
 import com.bulingzhuang.deadline.impl.presenters.MainPresenterImpl
 import com.bulingzhuang.deadline.interfaces.presenters.MainPresenter
 import com.bulingzhuang.deadline.interfaces.views.MainView
-import com.bulingzhuang.deadline.utils.showLogE
+import com.bulingzhuang.deadline.utils.database
+import com.bulingzhuang.deadline.utils.db.DBUtil
 import com.bulingzhuang.deadline.utils.showSnakeBar
+import com.bulingzhuang.deadline.views.adapters.DeadlineModelAdapter
 
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.db.delete
+import org.jetbrains.anko.db.insert
 
 class MainActivity : AppCompatActivity(), MainView {
 
@@ -23,10 +29,36 @@ class MainActivity : AppCompatActivity(), MainView {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         init()
+//        btn_test.setOnClickListener {
+//            database.use {
+//                //添加数据
+//                val currentTimeMillis = System.currentTimeMillis()
+//                insert(DBUtil.TABLE_NAME_deadline,
+//                        DBUtil.DEADLINE_content to et_content.text.toString(),
+//                        DBUtil.DEADLINE_type to "节日",
+//                        DBUtil.DEADLINE_startTime to currentTimeMillis,
+//                        DBUtil.DEADLINE_endTime to (currentTimeMillis - 30000),
+//                        DBUtil.DEADLINE_startColor to "#FFFFFF",
+//                        DBUtil.DEADLINE_endColor to "#000FFF")
+//            }
+//        }
+        btn1.setOnClickListener {
+            database.use {
+                //删除数据
+                delete(DBUtil.TABLE_NAME_deadline,
+                        "(${DBUtil.DEADLINE_id} = {${DBUtil.DEADLINE_id}})",
+                        DBUtil.DEADLINE_id to et.text.toString())
+            }
+        }
+        btn.setOnClickListener {
+            val split = et.text.toString()
+            mPresenter.insertItem(this,split)
+        }
     }
 
     private fun init() {
         mPresenter = MainPresenterImpl(this)
+        mPresenter.initAdapter(this, rv_content)
     }
 
     override fun onResume() {
@@ -70,23 +102,23 @@ class MainActivity : AppCompatActivity(), MainView {
      * 更新天气信息
      */
     override fun updateWeather(data: WeatherModel.ResultsBean.NowBean) {
-            val temp = data.temperature
-            val code = data.code
-            if (temp.startsWith("-")) {
-                temp_weather.refreshTempData(temp.substring(1, temp.length).toInt(), true)
-            } else {
-                temp_weather.refreshTempData(temp.toInt())
+        val temp = data.temperature
+        val code = data.code
+        if (temp.startsWith("-")) {
+            temp_weather.refreshTempData(temp.substring(1, temp.length).toInt(), true)
+        } else {
+            temp_weather.refreshTempData(temp.toInt())
+        }
+        when (code) {
+            "4", "5", "6", "7", "8", "9", "30", "31", "34", "35", "36" -> {
+                iv_weather.setImageResource(R.drawable.ic_cloud)
             }
-            when(code){
-                "4","5","6","7","8","9","30","31","34","35","36"->{
-                    iv_weather.setImageResource(R.drawable.ic_cloud)
-                }
-                "10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25"->{
-                    iv_weather.setImageResource(R.drawable.ic_rain)
-                }
-                else->{
-                    iv_weather.setImageResource(R.drawable.ic_sun)
-                }
+            "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25" -> {
+                iv_weather.setImageResource(R.drawable.ic_rain)
+            }
+            else -> {
+                iv_weather.setImageResource(R.drawable.ic_sun)
+            }
         }
     }
 

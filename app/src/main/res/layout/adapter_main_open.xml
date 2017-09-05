@@ -8,22 +8,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="6dp"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:background="?android:attr/selectableItemBackground"
         app:cardCornerRadius="2.33dp"
         app:cardElevation="1dp">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="10dp"
             android:paddingTop="10dp">
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -33,54 +34,57 @@
                     android:layout_height="wrap_content">
 
                     <com.bulingzhuang.deadline.views.ui.CircleProgressView
-                        android:id="@+id/cpv_content"
+                        android:id="@+id/cpv_day"
                         android:layout_width="66dp"
                         android:layout_height="66dp"
                         android:layout_centerInParent="true"
                         app:circleColorE="@color/amber500"
                         app:circleColorS="@color/red500"
                         app:currentNum="23"
-                        app:textCenter="true"
-                        app:fillNum="31"/>
+                        app:fillNum="31"
+                        app:textCenter="true"/>
 
                     <TextView
+                        android:id="@+id/tv_day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:fontFamily="@font/pingfang_light"
-                        android:text="23d"
+                        android:textStyle="bold"
                         android:textColor="@color/colorPrimary"
                         android:textSize="16sp"
                         />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="78dp"
-                    android:layout_marginLeft="78dp">
+                    android:layout_marginStart="78dp">
 
                     <com.bulingzhuang.deadline.views.ui.CircleProgressView
-                        android:id="@+id/cpv_content2"
+                        android:id="@+id/cpv_hour"
                         android:layout_width="66dp"
                         android:layout_height="66dp"
                         android:layout_centerInParent="true"
                         app:circleColorE="@color/amber500"
                         app:circleColorS="@color/red500"
                         app:currentNum="3"
-                        app:textCenter="true"
-                        app:fillNum="24"/>
+                        app:fillNum="24"
+                        app:textCenter="true"/>
 
                     <TextView
+                        android:id="@+id/tv_hour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:fontFamily="@font/pingfang_light"
-                        android:text="3h"
+                        android:textStyle="bold"
                         android:textColor="@color/colorPrimary"
                         android:textSize="16sp"
                         />
                 </RelativeLayout>
             </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -89,15 +93,16 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:fontFamily="@font/pingfang_light"
-                    android:text="发工资"
-                    android:textStyle="bold"
                     android:textColor="@color/red500"
                     android:textSize="16sp"
+                    android:textStyle="bold"
                     />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -105,45 +110,58 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:fontFamily="@font/pingfang_light"
-                        android:text="类型：节日"
+                        android:textStyle="bold"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"
                         />
+
                     <TextView
+                        android:id="@+id/tv_startTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:fontFamily="@font/pingfang_light"
-                        android:text="2017-08-15 16时"
+                        android:textStyle="bold"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"
                         />
+
                     <TextView
+                        android:id="@+id/tv_endTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:fontFamily="@font/pingfang_light"
-                        android:text="至 2017-09-15 19时"
+                        android:textStyle="bold"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"
                         />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:paddingTop="5dp">
+
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:id="@+id/btn_edit"
+                            android:layout_width="30dp"
+                            android:paddingBottom="6dp"
+                            android:layout_height="30dp"
                             app:srcCompat="@drawable/ic_create_black_24dp"/>
+
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginLeft="16dp"
+                            android:id="@+id/btn_del"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:paddingBottom="6dp"
+                            android:layout_marginStart="24dp"
                             app:srcCompat="@drawable/ic_delete_black_24dp"/>
                     </LinearLayout>
                 </LinearLayout>

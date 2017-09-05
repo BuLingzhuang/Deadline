@@ -20,7 +20,7 @@ class CircleProgressView : View {
     //    private var fillNum: Int = 0//总数值
 //    private var currentNum: Int = 0//当前数值
     private var sweepAngle: Float = 0f//圆环划过的角度
-    private var lastAngle: Float = 0f//开始改变前划过角度
+//    private var lastAngle: Float = 0f//开始改变前划过角度
     private var mCircleColorS: Int? = 0//起始环形颜色
     private var mCircleColorE: Int? = 0//结束环形颜色
     private var mDensity: Float = 0f//屏幕密度
@@ -32,18 +32,24 @@ class CircleProgressView : View {
         init(context)
     }
 
-    public fun setData(currentNum: Int, fillNum: Int) {
+    fun setData(currentNum: Int, fillNum: Int) {
         val futureSweepAngle = currentNum * 360f / fillNum
-        val duration = Math.abs(futureSweepAngle - sweepAngle) / 360 * 2333 + 233f
-        lastAngle = sweepAngle
-        val anim = ObjectAnimator.ofFloat(this, "sweepAngle", futureSweepAngle - sweepAngle)
+        val duration = futureSweepAngle / 360 * 2333 + 233f
+//        lastAngle = sweepAngle
+//        val anim = ObjectAnimator.ofFloat(this, "sweepAngle", futureSweepAngle - sweepAngle)
+        val anim = ObjectAnimator.ofFloat(this, "sweepAngle", futureSweepAngle)
         anim.duration = Math.min(duration, 2000f).toLong()
         anim.interpolator = AccelerateDecelerateInterpolator()
         anim.start()
     }
+    fun setDataNoAnim(currentNum: Int, fillNum: Int) {
+        val futureSweepAngle = currentNum * 360f / fillNum
+        sweepAngle = futureSweepAngle
+    }
 
     fun setSweepAngle(angleDifference: Float) {
-        this.sweepAngle = angleDifference + lastAngle
+//        this.sweepAngle = angleDifference + lastAngle
+        this.sweepAngle = angleDifference
         invalidate()
     }
 
