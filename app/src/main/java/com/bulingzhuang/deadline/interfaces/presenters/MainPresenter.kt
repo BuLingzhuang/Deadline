@@ -23,6 +23,11 @@ interface MainPresenter {
     fun initAdapter(context: Context, recyclerView: RecyclerView)
 
     /**
+     * 检查Adapter是否需要刷新
+     */
+    fun checkAdapter()
+
+    /**
      * 显示新增/编辑对话框
      */
     fun showDialog(context: AppCompatActivity, data:DeadlineModel?)

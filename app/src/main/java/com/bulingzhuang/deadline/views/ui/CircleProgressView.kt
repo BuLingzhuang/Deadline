@@ -34,7 +34,7 @@ class CircleProgressView : View {
 
     fun setData(currentNum: Int, fillNum: Int) {
         if (currentNum>0){
-            val futureSweepAngle = currentNum * 360f / fillNum
+            val futureSweepAngle = currentNum * 333f / fillNum
             val duration = futureSweepAngle / 360 * 2333 + 233f
 //        lastAngle = sweepAngle
 //        val anim = ObjectAnimator.ofFloat(this, "sweepAngle", futureSweepAngle - sweepAngle)

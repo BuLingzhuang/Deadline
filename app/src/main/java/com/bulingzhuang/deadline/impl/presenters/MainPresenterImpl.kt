@@ -99,6 +99,7 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
      * 添加一条数据
      */
     override fun insertItem(context: Context, content: String, typeName: String, startTime: Long, endTime: Long, textColor: String, startColor: String, endColor: String, isGradient: Boolean) {
+        showLogE("内容=$content，类型=$typeName，开始时间=$startTime，结束时间=$endTime，文字颜色=$textColor，开始颜色=$startColor，结束颜色=$endColor，使用渐变=$isGradient")
         val isGradientStr = if (isGradient) {
             "true"
         } else {
@@ -132,7 +133,7 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
     override fun initAdapter(context: Context, recyclerView: RecyclerView) {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
-        mAdapter = DeadlineModelAdapter(context)
+        mAdapter = DeadlineModelAdapter(context,System.currentTimeMillis())
         recyclerView.adapter = mAdapter
         context.database.use {
             val select = select(DBUtil.TABLE_NAME_deadline)
@@ -143,6 +144,13 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
             }
             mAdapter.refreshData(parseList)
         }
+    }
+
+    /**
+     * 检查Adapter是否需要刷新
+     */
+    override fun checkAdapter() {
+        mAdapter.checkAdapter()
     }
 
     /**

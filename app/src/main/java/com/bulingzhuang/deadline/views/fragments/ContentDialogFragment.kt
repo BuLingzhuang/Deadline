@@ -141,8 +141,13 @@ class ContentDialogFragment : DialogFragment() {
             DialogType.ADD.typeName -> {
                 val calendar = Calendar.getInstance()
                 val year = calendar.get(Calendar.YEAR)
-                mTvStartDate.text = String.format(Locale.CHINA, "%d-09-15", year)
-                mTvEndDate.text = String.format(Locale.CHINA, "%d-09-15", year + 1)
+                val month = switchStr(calendar.get(Calendar.MONTH), true)
+                val day = switchStr(calendar.get(Calendar.DAY_OF_MONTH))
+                mTvStartDate.text = String.format(Locale.CHINA, "%d%s%s", year, month, day)
+                mTvEndDate.text = String.format(Locale.CHINA, "%d%s%s", year + 1, month, day)
+                val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                mSpStartHour.setSelection(hour)
+                mSpEndHour.setSelection(hour)
             }
             DialogType.EDIT.typeName -> {
                 if (mLocalData != null) {
@@ -184,7 +189,7 @@ class ContentDialogFragment : DialogFragment() {
                     if (startDate.isNotEmpty() && mStartHour.isNotEmpty() && endDate.isNotEmpty() && mEndHour.isNotEmpty()) {
                         val startMillis = formatStr2Millis(startDate, mStartHour)
                         val endMillis = formatStr2Millis(endDate, mEndHour)
-                        (activity as MainActivity).mPresenter.insertItem(context, mEtContent.text.toString(), mTypeStr, startMillis, endMillis, mContentColor, mStartColor, mEndColor,mIsGradient)
+                        (activity as MainActivity).mPresenter.insertItem(context, mEtContent.text.toString(), mTypeStr, startMillis, endMillis, mContentColor, mStartColor, mEndColor, mIsGradient)
                     }
                 }
             }

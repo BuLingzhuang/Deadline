@@ -11,13 +11,13 @@ import org.jetbrains.anko.db.RowParser
 class DeadlineRowParser : RowParser<DeadlineModel> {
     override fun parseRow(columns: Array<Any?>): DeadlineModel {
         val type = when (columns[2]) {
-            DeadlineModel.Type.BIRTHDAY.name -> {
+            DeadlineModel.Type.BIRTHDAY.typeName -> {
                 DeadlineModel.Type.BIRTHDAY
             }
-            DeadlineModel.Type.WORK.name -> {
+            DeadlineModel.Type.WORK.typeName -> {
                 DeadlineModel.Type.WORK
             }
-            DeadlineModel.Type.FESTIVAL.name -> {
+            DeadlineModel.Type.FESTIVAL.typeName -> {
                 DeadlineModel.Type.FESTIVAL
             }
             else -> {

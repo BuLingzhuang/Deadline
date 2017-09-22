@@ -151,12 +151,21 @@ class ColorDialogFragment : DialogFragment() {
             crgColor.setColor(mEndColor)
         }
 
+        sDouble.isChecked = mIsGradient
+        if (mIsGradient) {
+            llEndColor.alpha = 1f
+            llEndColor.visibility = View.VISIBLE
+        } else {
+            llEndColor.alpha = 0f
+            llEndColor.visibility = View.GONE
+        }
+
         //点击Switch显隐
         sDouble.setOnCheckedChangeListener { _, isChecked ->
             changeSwitch(isChecked)
         }
 
-        sDouble.isChecked = mIsGradient
+
 
         builder.setView(inflate)
         builder.setNegativeButton("取消", { _: DialogInterface, _: Int ->
