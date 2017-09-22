@@ -19,8 +19,10 @@ class DBUtil(context: Context) : ManagedSQLiteOpenHelper(context, DB_NAME) {
         val DEADLINE_type = "type"
         val DEADLINE_startTime = "startTime"
         val DEADLINE_endTime = "endTime"
-        val DEADLINE_startColor = "startColor"
+        val DEADLINE_startColor = "Args_startColor"
         val DEADLINE_endColor = "endColor"
+        val DEADLINE_textColor = "textColor"
+        val DEADLINE_isGradient = "isGradient"
 
         private var instance: DBUtil? = null
 
@@ -41,7 +43,9 @@ class DBUtil(context: Context) : ManagedSQLiteOpenHelper(context, DB_NAME) {
                 DEADLINE_startTime to INTEGER,
                 DEADLINE_endTime to INTEGER,
                 DEADLINE_startColor to TEXT,
-                DEADLINE_endColor to TEXT)
+                DEADLINE_endColor to TEXT,
+                DEADLINE_textColor to TEXT,
+                DEADLINE_isGradient to TEXT)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

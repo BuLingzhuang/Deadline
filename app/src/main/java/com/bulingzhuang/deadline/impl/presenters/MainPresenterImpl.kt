@@ -1,20 +1,30 @@
 package com.bulingzhuang.deadline.impl.presenters
 
 import android.content.Context
+import android.content.DialogInterface
+import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.ActionMode
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
+import com.bulingzhuang.deadline.R
+import com.bulingzhuang.deadline.base.BaseActivity
+import com.bulingzhuang.deadline.bean.DeadlineModel
 import com.bulingzhuang.deadline.bean.WeatherModel
 import com.bulingzhuang.deadline.impl.interactors.MainInteractorImpl
 import com.bulingzhuang.deadline.interfaces.presenters.MainPresenter
 import com.bulingzhuang.deadline.interfaces.views.MainView
-import com.bulingzhuang.deadline.utils.Constants
-import com.bulingzhuang.deadline.utils.SharePreferencesUtil
-import com.bulingzhuang.deadline.utils.database
+import com.bulingzhuang.deadline.utils.*
 import com.bulingzhuang.deadline.utils.db.DBUtil
 import com.bulingzhuang.deadline.utils.db.DeadlineRowParser
 import com.bulingzhuang.deadline.utils.net.ApiCallback
-import com.bulingzhuang.deadline.utils.showLogE
 import com.bulingzhuang.deadline.views.adapters.DeadlineModelAdapter
+import com.bulingzhuang.deadline.views.fragments.ContentDialogFragment
 import com.google.gson.Gson
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
@@ -31,6 +41,9 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
 
     private lateinit var mAdapter: DeadlineModelAdapter
 
+    /**
+     * 获取天气数据
+     */
     override fun getWeatherData(context: Context) {
         val lastRefreshDataStr = SharePreferencesUtil.getString(Constants.MAIN_LAST_WEATHER_REFRESH_DATA)
         showLogE("上次一访问天气接口数据：$lastRefreshDataStr")
@@ -41,7 +54,7 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
             if (System.currentTimeMillis() - data.createTime < 1000 * 60 * 30) {
                 showLogE("使用本地缓存的数据")
                 refresh = false
-                mMainView.updateWeather(data)
+                mMainView.updateWeather(data,false)
             }
         }
         if (refresh) {
@@ -67,20 +80,41 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
         }
     }
 
-    override fun insertItem(context: Context,str: String) {
+    enum class DialogType(val typeName: String) {
+        ADD("新增"), EDIT("编辑")
+    }
+
+    /**
+     * 显示新增/编辑对话框
+     */
+    override fun showDialog(context: AppCompatActivity, data: DeadlineModel?) {
+        if (data != null) {
+            ContentDialogFragment.newInstance(data).show(context.supportFragmentManager, "contentDialog")
+        } else {
+            ContentDialogFragment.newInstance().show(context.supportFragmentManager, "contentDialog")
+        }
+    }
+
+    /**
+     * 添加一条数据
+     */
+    override fun insertItem(context: Context, content: String, typeName: String, startTime: Long, endTime: Long, textColor: String, startColor: String, endColor: String, isGradient: Boolean) {
+        val isGradientStr = if (isGradient) {
+            "true"
+        } else {
+            "false"
+        }
         context.database.use {
             //添加数据
-            val currentTimeMillis = System.currentTimeMillis()
-            val split = str.split(",")
-            val num = split[0].toInt()
-            val num1 = split[1].toInt()
             insert(DBUtil.TABLE_NAME_deadline,
-                    DBUtil.DEADLINE_content to str,
-                    DBUtil.DEADLINE_type to "节日",
-                    DBUtil.DEADLINE_startTime to (currentTimeMillis - num*3600*1000),
-                    DBUtil.DEADLINE_endTime to (currentTimeMillis + num1*3600*1000),
-                    DBUtil.DEADLINE_startColor to "#FFFFFF",
-                    DBUtil.DEADLINE_endColor to "#000FFF")
+                    DBUtil.DEADLINE_content to content,
+                    DBUtil.DEADLINE_type to typeName,
+                    DBUtil.DEADLINE_startTime to startTime,
+                    DBUtil.DEADLINE_endTime to endTime,
+                    DBUtil.DEADLINE_startColor to startColor,
+                    DBUtil.DEADLINE_endColor to endColor,
+                    DBUtil.DEADLINE_textColor to textColor,
+                    DBUtil.DEADLINE_isGradient to isGradientStr)
 
             val whereArgs = select(DBUtil.TABLE_NAME_deadline).whereArgs("_id > {maxId}", "maxId" to mAdapter.getMaxId())
             val parseList = whereArgs.parseList(DeadlineRowParser())
@@ -92,10 +126,13 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
         }
     }
 
+    /**
+     * 初始化Adapter
+     */
     override fun initAdapter(context: Context, recyclerView: RecyclerView) {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
-        mAdapter = DeadlineModelAdapter(context, System.currentTimeMillis())
+        mAdapter = DeadlineModelAdapter(context)
         recyclerView.adapter = mAdapter
         context.database.use {
             val select = select(DBUtil.TABLE_NAME_deadline)
@@ -108,6 +145,9 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
         }
     }
 
+    /**
+     * 销毁页面操作
+     */
     override fun doBeforeDestroy() {
         mMainInteractor.doBeforeDestroy()
     }

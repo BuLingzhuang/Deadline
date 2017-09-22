@@ -33,23 +33,34 @@ class CircleProgressView : View {
     }
 
     fun setData(currentNum: Int, fillNum: Int) {
-        val futureSweepAngle = currentNum * 360f / fillNum
-        val duration = futureSweepAngle / 360 * 2333 + 233f
+        if (currentNum>0){
+            val futureSweepAngle = currentNum * 360f / fillNum
+            val duration = futureSweepAngle / 360 * 2333 + 233f
 //        lastAngle = sweepAngle
 //        val anim = ObjectAnimator.ofFloat(this, "sweepAngle", futureSweepAngle - sweepAngle)
-        val anim = ObjectAnimator.ofFloat(this, "sweepAngle", futureSweepAngle)
-        anim.duration = Math.min(duration, 2000f).toLong()
-        anim.interpolator = AccelerateDecelerateInterpolator()
-        anim.start()
+            val anim = ObjectAnimator.ofFloat(this, "sweepAngle", futureSweepAngle)
+            if (duration>0){
+                anim.duration = Math.min(duration, 2000f).toLong()
+            }else{
+                anim.duration = 2000L
+            }
+            anim.interpolator = AccelerateDecelerateInterpolator()
+            anim.start()
+        }else{
+            setSweepAngle(0f)
+        }
     }
     fun setDataNoAnim(currentNum: Int, fillNum: Int) {
         val futureSweepAngle = currentNum * 360f / fillNum
         sweepAngle = futureSweepAngle
     }
 
-    fun setSweepAngle(angleDifference: Float) {
-//        this.sweepAngle = angleDifference + lastAngle
-        this.sweepAngle = angleDifference
+    /**
+     * 动画使用的，不可private
+     */
+    fun setSweepAngle(sweepAngle: Float) {
+//        this.sweepAngle = sweepAngle + lastAngle
+        this.sweepAngle = sweepAngle
         invalidate()
     }
 

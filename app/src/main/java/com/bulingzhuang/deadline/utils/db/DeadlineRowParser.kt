@@ -25,6 +25,7 @@ class DeadlineRowParser : RowParser<DeadlineModel> {
             }
         }
         //        showLogE("_id=${columns[0]},$deadlineModel")
-        return DeadlineModel(columns[0] as Long, columns[1] as String, type, columns[3] as Long, columns[4] as Long, columns[5] as String, columns[6] as String)
+        return DeadlineModel(columns[0] as Long, columns[1] as String, type, columns[3] as Long, columns[4] as Long,
+                columns[5] as String, columns[6] as String, columns[7] as String, columns[8] as String)
     }
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="content_types">
+        <item>节日</item>
+        <item>生日</item>
+        <item>工作</item>
+        <item>家庭</item>
+        <item>其他</item>
+    </string-array>
+    <string-array name="content_hour">
+        <item>0 时</item>
+        <item>1 时</item>
+        <item>2 时</item>
+        <item>3 时</item>
+        <item>4 时</item>
+        <item>5 时</item>
+        <item>6 时</item>
+        <item>7 时</item>
+        <item>8 时</item>
+        <item>9 时</item>
+        <item>10 时</item>
+        <item>11 时</item>
+        <item>12 时</item>
+        <item>13 时</item>
+        <item>14 时</item>
+        <item>15 时</item>
+        <item>16 时</item>
+        <item>17 时</item>
+        <item>18 时</item>
+        <item>19 时</item>
+        <item>20 时</item>
+        <item>21 时</item>
+        <item>22 时</item>
+        <item>23 时</item>
+    </string-array>
+
+    <string-array name="colorRadioGroup_color">
+        <item>#f4511e</item>
+        <item>#fb8c00</item>
+        <item>#ffb300</item>
+        <item>#fdd835</item>
+        <item>#c0ca33</item>
+        <item>#7cb342</item>
+        <item>#0a8f08</item>
+        <item>#00897b</item>
+        <item>#00acc1</item>
+        <item>#039be5</item>
+        <item>#4e6cef</item>
+        <item>#3949ab</item>
+        <item>#5e35b1</item>
+        <item>#8e24aa</item>
+        <item>#d81b60</item>
+        <item>#dd191d</item>
+    </string-array>
+</resources>

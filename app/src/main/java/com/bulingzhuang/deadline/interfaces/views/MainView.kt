@@ -11,7 +11,7 @@ interface MainView {
     /**
      * 更新天气信息
      */
-    fun updateWeather(data: WeatherModel.ResultsBean.NowBean)
+    fun updateWeather(data: WeatherModel.ResultsBean.NowBean,showAnim:Boolean = true)
 
     /**
      * 返回错误信息

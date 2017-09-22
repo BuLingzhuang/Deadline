@@ -11,6 +11,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.bulingzhuang.deadline.R
+import com.bulingzhuang.deadline.utils.showLogE
 
 /**
  * Created by bulingzhuang
@@ -37,15 +38,21 @@ class TEMPView : View {
     /**
      * 刷新温度
      */
-    fun refreshTempData(tempNum: Int, isNegative: Boolean = false) {
+    fun refreshTempData(tempNum: Int, showAnim: Boolean, isNegative: Boolean = false) {
         mIsNegative = isNegative
         val tempNumF = tempNum + 0.6f
         maxTemp = tempNumF
-        val duration = tempNum * 4666 / 30 + 233f
-        val anim = ObjectAnimator.ofFloat(this, "temp", tempNumF)
-        anim.duration = Math.min(duration, 4666f).toLong()
-        anim.interpolator = AccelerateDecelerateInterpolator()
-        anim.start()
+        showLogE("是否显示动画：$showAnim")
+        //是否显示动画
+        if (showAnim) {
+            val duration = tempNum * 4666 / 30 + 233f
+            val anim = ObjectAnimator.ofFloat(this, "temp", tempNumF)
+            anim.duration = Math.min(duration, 4666f).toLong()
+            anim.interpolator = AccelerateDecelerateInterpolator()
+            anim.start()
+        } else {
+            setTemp(tempNumF)
+        }
     }
 
     fun setTemp(tempNum: Float) {
@@ -61,7 +68,7 @@ class TEMPView : View {
         typedArray.recycle()
         mWhitePaint.textSize = textSize
         mWhitePaint.color = Color.WHITE
-        val font = ResourcesCompat.getFont(context, R.font.pingfang_light)
+        val font = ResourcesCompat.getFont(context, R.font.pingfang_regular)
         mWhitePaint.typeface = font
         mWhitePaint.isFakeBoldText = true
         mColorPaint.textSize = textSize
@@ -102,8 +109,8 @@ class TEMPView : View {
                 negativeWidth = mColorPaint.measureText(negativeStr)
                 canvas.drawText(negativeStr, 0f, centerY, mWhitePaint)
             }
-            canvas.drawText(tempStr, negativeWidth+ dp2px(2f), textY, mWhitePaint)
-            canvas.drawText("℃", negativeWidth+measureText + dp2px(4f), centerY, mWhitePaint)
+            canvas.drawText(tempStr, negativeWidth + dp2px(2f), textY, mWhitePaint)
+            canvas.drawText("℃", negativeWidth + measureText + dp2px(4f), centerY, mWhitePaint)
             canvas.restore()
 
             canvas.save()
@@ -111,8 +118,8 @@ class TEMPView : View {
             if (mIsNegative) {
                 canvas.drawText(negativeStr, 0f, centerY, mColorPaint)
             }
-            canvas.drawText(tempStr, negativeWidth+ dp2px(2f), textY, mColorPaint)
-            canvas.drawText("℃", negativeWidth+measureText + dp2px(4f), centerY, mColorPaint)
+            canvas.drawText(tempStr, negativeWidth + dp2px(2f), textY, mColorPaint)
+            canvas.drawText("℃", negativeWidth + measureText + dp2px(4f), centerY, mColorPaint)
             canvas.restore()
         }
     }

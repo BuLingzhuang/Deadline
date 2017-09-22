@@ -5,12 +5,12 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+        android:name=".base.DeadlineApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_icon"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_icon"
         android:supportsRtl="true"
-        android:name=".base.DeadlineApplication"
         android:theme="@style/AppTheme">
         <activity
             android:name=".views.activitys.MainActivity"
@@ -32,6 +32,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/new_app_widget_info"/>
         </receiver>
+
+        <activity android:name=".TestActivity">
+
+        </activity>
     </application>
 
 </manifest>

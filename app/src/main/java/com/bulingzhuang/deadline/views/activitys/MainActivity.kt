@@ -5,24 +5,18 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.bulingzhuang.deadline.R
-import com.bulingzhuang.deadline.bean.DeadlineModel
 import com.bulingzhuang.deadline.bean.WeatherModel
 import com.bulingzhuang.deadline.impl.presenters.MainPresenterImpl
 import com.bulingzhuang.deadline.interfaces.presenters.MainPresenter
 import com.bulingzhuang.deadline.interfaces.views.MainView
-import com.bulingzhuang.deadline.utils.database
-import com.bulingzhuang.deadline.utils.db.DBUtil
 import com.bulingzhuang.deadline.utils.showSnakeBar
-import com.bulingzhuang.deadline.views.adapters.DeadlineModelAdapter
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import org.jetbrains.anko.db.delete
-import org.jetbrains.anko.db.insert
 
 class MainActivity : AppCompatActivity(), MainView {
 
-    private lateinit var mPresenter: MainPresenter
+    lateinit var mPresenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,18 +36,18 @@ class MainActivity : AppCompatActivity(), MainView {
 //                        DBUtil.DEADLINE_endColor to "#000FFF")
 //            }
 //        }
-        btn1.setOnClickListener {
-            database.use {
-                //删除数据
-                delete(DBUtil.TABLE_NAME_deadline,
-                        "(${DBUtil.DEADLINE_id} = {${DBUtil.DEADLINE_id}})",
-                        DBUtil.DEADLINE_id to et.text.toString())
-            }
-        }
-        btn.setOnClickListener {
-            val split = et.text.toString()
-            mPresenter.insertItem(this,split)
-        }
+//        btn1.setOnClickListener {
+//            database.use {
+//                //删除数据
+//                delete(DBUtil.TABLE_NAME_deadline,
+//                        "(${DBUtil.DEADLINE_id} = {${DBUtil.DEADLINE_id}})",
+//                        DBUtil.DEADLINE_id to et.text.toString())
+//            }
+//        }
+//        btn.setOnClickListener {
+//            val split = et.text.toString()
+//            mPresenter.insertItem(this,split)
+//        }
     }
 
     private fun init() {
@@ -79,7 +73,7 @@ class MainActivity : AppCompatActivity(), MainView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_add -> {//新增
-
+                mPresenter.showDialog(this,null)
                 return true
             }
             R.id.action_accurateUpdate -> {//精确更新
@@ -101,13 +95,13 @@ class MainActivity : AppCompatActivity(), MainView {
     /**
      * 更新天气信息
      */
-    override fun updateWeather(data: WeatherModel.ResultsBean.NowBean) {
+    override fun updateWeather(data: WeatherModel.ResultsBean.NowBean, showAnim:Boolean) {
         val temp = data.temperature
         val code = data.code
         if (temp.startsWith("-")) {
-            temp_weather.refreshTempData(temp.substring(1, temp.length).toInt(), true)
+            temp_weather.refreshTempData(temp.substring(1, temp.length).toInt(), showAnim, true)
         } else {
-            temp_weather.refreshTempData(temp.toInt())
+            temp_weather.refreshTempData(temp.toInt(), showAnim)
         }
         when (code) {
             "4", "5", "6", "7", "8", "9", "30", "31", "34", "35", "36" -> {

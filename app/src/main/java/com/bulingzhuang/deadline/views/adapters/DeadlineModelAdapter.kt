@@ -18,7 +18,7 @@ import java.util.*
  * on 2017/8/30
  * E-mail:bulingzhuang@foxmail.com
  */
-class DeadlineModelAdapter(private val context: Context, private var refreshTime: Long) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DeadlineModelAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val mDataList: MutableList<DeadlineModel>
 
@@ -63,7 +63,7 @@ class DeadlineModelAdapter(private val context: Context, private var refreshTime
             R.layout.adapter_main_close -> {
                 val closeHolder = holder as DeadlineModelAdapterViewHolderClose
 //                if (refreshTime > item.endTime) {
-                val (rDay, rHour) = computeTime(refreshTime, item.endTime)
+                val (rDay, rHour) = computeTime(item.startTime, item.endTime)
                 val (rFillDay, rFillHour) = computeTime(item.startTime, item.endTime)
 //                closeHolder.mCpvDay.setData(rDay, rFillDay)
 //                closeHolder.mCpvHour.setData(rHour, rFillHour)
@@ -83,14 +83,13 @@ class DeadlineModelAdapter(private val context: Context, private var refreshTime
             }
             R.layout.adapter_main_open -> {
                 val openHolder = holder as DeadlineModelAdapterViewHolderOpen
-                val (rDay, rHour) = computeTime(refreshTime, item.endTime)
+                val (rDay, rHour) = computeTime(item.startTime, item.endTime)
                 openHolder.mCpvDay.setData(rDay, 30)
                 openHolder.mCpvHour.setData(rHour, 24)
                 openHolder.mTvDay.text = String.format(Locale.CHINA, "%sd", rDay)
                 openHolder.mTvHour.text = String.format(Locale.CHINA, "%sh", rHour)
                 openHolder.mTvContent.text = item.content
                 openHolder.mTvType.text = "类型：${item.type.typeName}"
-                TODO("显示的类型有问题，待调整")
                 openHolder.mTvStartTime.text = item.startTime.toString()
                 openHolder.mTvEndTime.text = item.endTime.toString()
             }

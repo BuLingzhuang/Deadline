@@ -1,7 +1,10 @@
 package com.bulingzhuang.deadline.interfaces.presenters
 
 import android.content.Context
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import com.bulingzhuang.deadline.bean.DeadlineModel
+import com.bulingzhuang.deadline.views.fragments.ContentDialogFragment
 
 /**
  * Created by bulingzhuang
@@ -17,9 +20,17 @@ interface MainPresenter {
     /**
      * 初始化Adapter
      */
-    fun initAdapter(context: Context,recyclerView: RecyclerView)
+    fun initAdapter(context: Context, recyclerView: RecyclerView)
 
-    fun insertItem(context: Context,str:String)
+    /**
+     * 显示新增/编辑对话框
+     */
+    fun showDialog(context: AppCompatActivity, data:DeadlineModel?)
+
+    /**
+     * 添加一条数据
+     */
+    fun insertItem(context: Context, content: String, typeName:String, startTime: Long, endTime: Long, textColor: String, startColor: String, endColor: String,isGradient:Boolean)
 
     /**
      * 销毁页面操作

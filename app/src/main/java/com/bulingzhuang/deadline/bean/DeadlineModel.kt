@@ -1,7 +1,6 @@
 package com.bulingzhuang.deadline.bean
 
-import android.graphics.Color
-import com.bulingzhuang.deadline.views.adapters.DeadlineModelAdapter
+import java.io.Serializable
 
 /**
  * Created by bulingzhuang
@@ -15,7 +14,9 @@ class DeadlineModel constructor(var _id: Long,
                                 var endTime: Long,
                                 var startColor: String,
                                 var endColor: String,
-                                var showStatus: ShowStatus = ShowStatus.OPEN) {
+                                var textColor: String,
+                                var isGradient: String,
+                                var showStatus: ShowStatus = ShowStatus.OPEN) : Serializable {
     enum class Type(val typeName: String) {
         FESTIVAL("节日"),
         BIRTHDAY("生日"),
@@ -29,6 +30,7 @@ class DeadlineModel constructor(var _id: Long,
     }
 
     override fun toString(): String {
-        return "_id=$_id,content=$content,type=${type.name},startTime=$startTime,endTime=$endTime,startColor=$startColor,endColor=$endColor"
+        return "_id=$_id,content=$content,type=${type.typeName},startTime=$startTime,endTime=$endTime," +
+                "Args_startColor=$startColor,endColor=$endColor,textColor=$textColor,isGradient=$isGradient"
     }
 }
