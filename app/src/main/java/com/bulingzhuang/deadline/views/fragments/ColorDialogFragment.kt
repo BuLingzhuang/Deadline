@@ -174,8 +174,8 @@ class ColorDialogFragment : DialogFragment() {
         })
         builder.setPositiveButton("确定", { _: DialogInterface, _: Int ->
             run {
-                if (parentFragment is ContentDialogFragment) {
-                    (parentFragment as ContentDialogFragment).setColorData(mContentColor, mStartColor, mEndColor, sDouble.isChecked)
+                if (parentFragment is AddDialogFragment) {
+                    (parentFragment as AddDialogFragment).setColorData(mContentColor, mStartColor, mEndColor, sDouble.isChecked)
                 }
             }
         })

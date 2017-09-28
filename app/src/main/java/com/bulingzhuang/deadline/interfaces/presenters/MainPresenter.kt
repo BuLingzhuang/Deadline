@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import com.bulingzhuang.deadline.bean.DeadlineModel
-import com.bulingzhuang.deadline.views.fragments.ContentDialogFragment
 
 /**
  * Created by bulingzhuang

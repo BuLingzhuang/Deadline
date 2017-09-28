@@ -49,8 +49,8 @@ class DatePickerDialogFragment : DialogFragment(), DatePickerDialog.OnDateSetLis
     }
 
     override fun onDateSet(dp: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        if (parentFragment is ContentDialogFragment) {
-            (parentFragment as ContentDialogFragment).setDate(year.toString() + switchStr(month, true) + switchStr(dayOfMonth),mTypeName)
+        if (parentFragment is AddDialogFragment) {
+            (parentFragment as AddDialogFragment).setDate(year.toString() + switchStr(month, true) + switchStr(dayOfMonth),mTypeName)
         }
     }
 

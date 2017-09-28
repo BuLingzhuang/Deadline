@@ -20,24 +20,24 @@ import java.util.*
  * on 2017/9/6
  * E-mail:bulingzhuang@foxmail.com
  */
-class ContentDialogFragment : DialogFragment() {
+class AddDialogFragment : DialogFragment() {
 
     companion object {
         val DIALOG_TYPE = "dialogType"
         val LOCAL_DATA = "deadlineModelData"
-        fun newInstance(): ContentDialogFragment {
+        fun newInstance(): AddDialogFragment {
             val args = Bundle()
             args.putString(DIALOG_TYPE, DialogType.ADD.typeName)
-            val fragment = ContentDialogFragment()
+            val fragment = AddDialogFragment()
             fragment.arguments = args
             return fragment
         }
 
-        fun newInstance(@NotNull data: DeadlineModel): ContentDialogFragment {
+        fun newInstance(@NotNull data: DeadlineModel): AddDialogFragment {
             val args = Bundle()
             args.putString(DIALOG_TYPE, DialogType.EDIT.typeName)
             args.putSerializable(LOCAL_DATA, data)
-            val fragment = ContentDialogFragment()
+            val fragment = AddDialogFragment()
             fragment.arguments = args
             return fragment
         }

@@ -1,19 +1,9 @@
 package com.bulingzhuang.deadline.impl.presenters
 
 import android.content.Context
-import android.content.DialogInterface
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.ActionMode
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.ImageView
-import android.widget.TextView
-import com.bulingzhuang.deadline.R
-import com.bulingzhuang.deadline.base.BaseActivity
 import com.bulingzhuang.deadline.bean.DeadlineModel
 import com.bulingzhuang.deadline.bean.WeatherModel
 import com.bulingzhuang.deadline.impl.interactors.MainInteractorImpl
@@ -24,7 +14,7 @@ import com.bulingzhuang.deadline.utils.db.DBUtil
 import com.bulingzhuang.deadline.utils.db.DeadlineRowParser
 import com.bulingzhuang.deadline.utils.net.ApiCallback
 import com.bulingzhuang.deadline.views.adapters.DeadlineModelAdapter
-import com.bulingzhuang.deadline.views.fragments.ContentDialogFragment
+import com.bulingzhuang.deadline.views.fragments.AddDialogFragment
 import com.google.gson.Gson
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
@@ -89,9 +79,9 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
      */
     override fun showDialog(context: AppCompatActivity, data: DeadlineModel?) {
         if (data != null) {
-            ContentDialogFragment.newInstance(data).show(context.supportFragmentManager, "contentDialog")
+            AddDialogFragment.newInstance(data).show(context.supportFragmentManager, "contentDialog")
         } else {
-            ContentDialogFragment.newInstance().show(context.supportFragmentManager, "contentDialog")
+            AddDialogFragment.newInstance().show(context.supportFragmentManager, "contentDialog")
         }
     }
 

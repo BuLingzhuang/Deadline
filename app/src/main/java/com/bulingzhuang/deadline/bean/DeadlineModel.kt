@@ -26,7 +26,7 @@ class DeadlineModel constructor(var _id: Long,
     }
 
     enum class ShowStatus {
-        OPEN, CLOSE, EMPTY
+        OPEN, CLOSE, VALID
     }
 
     override fun toString(): String {
