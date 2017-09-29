@@ -37,8 +37,23 @@ fun Context.showSnakeBar(msg: String, genView: View, duration: Int = Snackbar.LE
     snackBar.show()
 }
 
-fun showLogE(msg: String,tag: String = "BLZ") {
-    if (BuildConfig.DEBUG){
+/**
+ * 黑底白字的SnakeBar带点击操作
+ */
+fun Context.showSnakeBarWithAction(msg: String, genView: View, actionTitle: String, actionListener: View.OnClickListener, duration: Int = Snackbar.LENGTH_LONG) {
+    val snackBar = Snackbar.make(genView, msg, duration)
+    snackBar.setAction(actionTitle, actionListener)
+    val layout = snackBar.view
+    layout.background = ContextCompat.getDrawable(this, R.drawable.snackbar_bg_dark)
+    val tvText = layout.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+    val tvAction = layout.findViewById<TextView>(android.support.design.R.id.snackbar_action)
+    tvText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+    tvAction.setTextColor(ContextCompat.getColor(this, R.color.yellow700))
+    snackBar.show()
+}
+
+fun showLogE(msg: String, tag: String = "BLZ") {
+    if (BuildConfig.DEBUG) {
         Log.e(tag, msg)
     }
 }

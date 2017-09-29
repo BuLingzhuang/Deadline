@@ -1,15 +1,19 @@
 package com.bulingzhuang.deadline.views.activitys
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.bulingzhuang.deadline.R
+import com.bulingzhuang.deadline.bean.DeadlineModel
 import com.bulingzhuang.deadline.bean.WeatherModel
 import com.bulingzhuang.deadline.impl.presenters.MainPresenterImpl
 import com.bulingzhuang.deadline.interfaces.presenters.MainPresenter
 import com.bulingzhuang.deadline.interfaces.views.MainView
 import com.bulingzhuang.deadline.utils.showSnakeBar
+import com.bulingzhuang.deadline.utils.showSnakeBarWithAction
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -74,7 +78,7 @@ class MainActivity : AppCompatActivity(), MainView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_add -> {//新增
-                mPresenter.showDialog(this,null)
+                mPresenter.showDialog(this, null)
                 return true
             }
             R.id.action_accurateUpdate -> {//精确更新
@@ -96,7 +100,7 @@ class MainActivity : AppCompatActivity(), MainView {
     /**
      * 更新天气信息
      */
-    override fun updateWeather(data: WeatherModel.ResultsBean.NowBean, showAnim:Boolean) {
+    override fun updateWeather(data: WeatherModel.ResultsBean.NowBean, showAnim: Boolean) {
         val temp = data.temperature
         val code = data.code
         if (temp.startsWith("-")) {
@@ -119,5 +123,31 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun updateError(eText: String?) {
         showSnakeBar(eText?.let { it } ?: "请求失败", cl_gen)
+    }
+
+    /**
+     * 展示SnakeBar（有撤回）
+     */
+    fun showSnakeBarWithAction(str: String, removeData: DeadlineModel) {
+        showSnakeBarWithAction(str, cl_gen, "撤销", View.OnClickListener {
+            val isGradient = when (removeData.isGradient) {
+                "true" -> {
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+            mPresenter.insertItem(this, removeData.content, removeData.type.typeName,
+                    removeData.startTime, removeData.endTime, removeData.textColor,
+                    removeData.startColor, removeData.endColor, isGradient)
+        })
+    }
+
+    /**
+     * 展示SnakeBar（无撤回）
+     */
+    fun showSnakeBar(str: String) {
+        showSnakeBar(str, cl_gen)
     }
 }

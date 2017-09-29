@@ -10,6 +10,9 @@ import android.view.View
 import android.widget.*
 import com.bulingzhuang.deadline.R
 import com.bulingzhuang.deadline.bean.DeadlineModel
+import com.bulingzhuang.deadline.utils.Tools
+import com.bulingzhuang.deadline.utils.Tools.formatMillis2Str
+import com.bulingzhuang.deadline.utils.Tools.switchStr
 import com.bulingzhuang.deadline.utils.showToast
 import com.bulingzhuang.deadline.views.activitys.MainActivity
 import org.jetbrains.annotations.NotNull
@@ -237,32 +240,4 @@ class AddDialogFragment : DialogFragment() {
         mIsGradient = isGradient
     }
 
-    /**
-     * 时间毫秒数转换日期(yyyy-MM-dd)
-     */
-    private fun formatMillis2Str(time: Long): Pair<String, Int> {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = time
-        val year = calendar.get(Calendar.YEAR).toString()
-        val month = switchStr(calendar.get(Calendar.MONTH), true)
-        val day = switchStr(calendar.get(Calendar.DAY_OF_MONTH))
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        return Pair(year + month + day, hour)
-    }
-
-    /**
-     * 月、日转换str
-     */
-    private fun switchStr(int: Int, needAdd: Boolean = false): String {
-        val result: Int = if (needAdd) {
-            int + 1
-        } else {
-            int
-        }
-        return if (result < 10) {
-            "-0" + result.toString()
-        } else {
-            "-" + result.toString()
-        }
-    }
 }

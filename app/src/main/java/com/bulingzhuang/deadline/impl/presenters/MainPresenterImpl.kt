@@ -16,6 +16,7 @@ import com.bulingzhuang.deadline.utils.net.ApiCallback
 import com.bulingzhuang.deadline.views.adapters.DeadlineModelAdapter
 import com.bulingzhuang.deadline.views.fragments.AddDialogFragment
 import com.google.gson.Gson
+import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 
@@ -44,7 +45,7 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
             if (System.currentTimeMillis() - data.createTime < 1000 * 60 * 30) {
                 showLogE("使用本地缓存的数据")
                 refresh = false
-                mMainView.updateWeather(data,false)
+                mMainView.updateWeather(data, false)
             }
         }
         if (refresh) {
@@ -118,12 +119,26 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
     }
 
     /**
+     * 删除一条数据
+     */
+    override fun delItem(context: Context, _id: Long) {
+        showLogE("要删除id=$_id 对应的条目")
+        context.database.use {
+            //删除数据
+            delete(DBUtil.TABLE_NAME_deadline,
+                    "(${DBUtil.DEADLINE_id} = {${DBUtil.DEADLINE_id}})",
+                    DBUtil.DEADLINE_id to _id)
+        }
+        mAdapter.delItem(_id)
+    }
+
+    /**
      * 初始化Adapter
      */
-    override fun initAdapter(context: Context, recyclerView: RecyclerView) {
+    override fun initAdapter(context: AppCompatActivity, recyclerView: RecyclerView) {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
-        mAdapter = DeadlineModelAdapter(context,System.currentTimeMillis())
+        mAdapter = DeadlineModelAdapter(context, System.currentTimeMillis())
         recyclerView.adapter = mAdapter
         context.database.use {
             val select = select(DBUtil.TABLE_NAME_deadline)

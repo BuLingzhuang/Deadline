@@ -1,7 +1,7 @@
 package com.bulingzhuang.deadline.views.adapters
 
-import android.content.Context
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.bulingzhuang.deadline.R
 import com.bulingzhuang.deadline.bean.DeadlineModel
+import com.bulingzhuang.deadline.utils.Tools
 import com.bulingzhuang.deadline.utils.showLogE
+import com.bulingzhuang.deadline.views.activitys.MainActivity
+import com.bulingzhuang.deadline.views.fragments.ShowDialogFragment
 import com.bulingzhuang.deadline.views.ui.CircleProgressView
 import org.jetbrains.annotations.NotNull
 import java.util.*
@@ -20,9 +23,9 @@ import kotlin.collections.ArrayList
  * on 2017/8/30
  * E-mail:bulingzhuang@foxmail.com
  */
-class DeadlineModelAdapter(context: Context, private var refreshTime: Long) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: Long) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var mContext: Context = context
+    private var mContext: AppCompatActivity = context
     private var mHourOfDay: Int = 0
     private var mDayOfMonth: Int = 0
     private var mInvalidSize: Int = 0 //失效条目数量
@@ -95,6 +98,27 @@ class DeadlineModelAdapter(context: Context, private var refreshTime: Long) : Re
     }
 
     /**
+     * 删除一条数据
+     */
+    fun delItem(_id: Long) {
+        for (position in mDataList.indices) {
+            val item = mDataList[position]
+            if (item._id == _id) {
+                if (mContext is MainActivity && mDataList.remove(item)) {
+                    notifyItemRemoved(position)
+                    //失效数据不可撤销，只显示删除成功
+                    if (item.showStatus == DeadlineModel.ShowStatus.OPEN && refreshTime > item.endTime) {
+                        (mContext as MainActivity).showSnakeBar("删除成功")
+                    } else {
+                        (mContext as MainActivity).showSnakeBarWithAction("删除成功", item)
+                    }
+                    break
+                }
+            }
+        }
+    }
+
+    /**
      * 获取当前列表中最大id
      */
     fun getMaxId(): Long {
@@ -107,11 +131,14 @@ class DeadlineModelAdapter(context: Context, private var refreshTime: Long) : Re
         when (holder?.itemViewType) {
             R.layout.adapter_main_open -> {
                 val openHolder = holder as DeadlineModelAdapterViewHolderOpen
-                val (rDay, rHour) = computeTime(refreshTime, item.endTime)
-                val (rFillDay, _) = computeTime(item.startTime, item.endTime)
+                var (rDay, rHour) = Tools.computeTime(refreshTime, item.endTime)
+                val (rFillDay, _) = Tools.computeTime(item.startTime, item.endTime)
                 openHolder.mCpvDay.setData(rDay, rFillDay)
                 openHolder.mCpvHour.setData(rHour, 24)
                 if (rDay >= 0 && rHour >= 0) {
+                    if (rDay > 999) {
+                        rDay = 999
+                    }
                     openHolder.mTvDay.text = String.format(Locale.CHINA, "%dd", rDay)
                     openHolder.mTvHour.text = String.format(Locale.CHINA, "%dh", rHour)
                     openHolder.mTvContent.setTextColor(ContextCompat.getColor(mContext, R.color.red500))
@@ -123,7 +150,11 @@ class DeadlineModelAdapter(context: Context, private var refreshTime: Long) : Re
                     openHolder.mTvEndTime.setTextColor(ContextCompat.getColor(mContext, R.color.invalid_gray))
                 }
                 openHolder.mTvContent.text = item.content
-                openHolder.mTvEndTime.text = item.endTime.toString()
+                val (endDay, endHour) = Tools.formatMillis2Str(item.endTime)
+                openHolder.mTvEndTime.text = String.format(Locale.CHINA, "至 %s %d时", endDay, endHour)
+                openHolder.itemView.setOnClickListener {
+                    ShowDialogFragment.newInstance(refreshTime,item).show(mContext.supportFragmentManager, "showDialog")
+                }
             }
             R.layout.adapter_main_valid -> {
 
@@ -131,16 +162,6 @@ class DeadlineModelAdapter(context: Context, private var refreshTime: Long) : Re
         }
     }
 
-    private val hourPara = 1000 * 60 * 60
-    /**
-     * 计算剩余时间
-     */
-    private fun computeTime(sDate: Long, eDate: Long): Pair<Int, Int> {
-        val remainingD = eDate - sDate
-        val rDay = remainingD / hourPara / 24
-        val rHour = remainingD / hourPara - rDay * 24
-        return Pair(rDay.toInt(), rHour.toInt())
-    }
 
     override fun getItemCount(): Int {
         return mDataList.size
