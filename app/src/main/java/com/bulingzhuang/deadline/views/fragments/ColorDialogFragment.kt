@@ -26,13 +26,11 @@ class ColorDialogFragment : DialogFragment() {
 
     companion object {
         val Args_contentColor = "Args_contentColor"
-        val Args_startColor = "Args_startColor"
         val Args_endColor = "endColor"
         val Args_isGradient = "isGradient"
-        fun newInstance(isGradient: Boolean, contentColor: String = "#37474f", startColor: String = "#37474f", endColor: String = "#37474f"): ColorDialogFragment {
+        fun newInstance(isGradient: Boolean, contentColor: String = "#37474f", endColor: String = "#37474f"): ColorDialogFragment {
             val args = Bundle()
             args.putString(Args_contentColor, contentColor)
-            args.putString(Args_startColor, startColor)
             args.putString(Args_endColor, endColor)
             args.putBoolean(Args_isGradient, isGradient)
             val fragment = ColorDialogFragment()
@@ -43,20 +41,17 @@ class ColorDialogFragment : DialogFragment() {
 
     //表示当前正在录入颜色的字段
     enum class InputType {
-        Content, Start, End
+        Content, End
     }
 
-    lateinit var tvStartColor: TextView
+    lateinit var tvContentColor:TextView
     lateinit var llContentColor: LinearLayout
-    lateinit var llStartColor: LinearLayout
     lateinit var llEndColor: LinearLayout
     lateinit var vContentColor: View
-    lateinit var vStartColor: View
     lateinit var vEndColor: View
     lateinit var crgColor: ColorRadioGroup
     var mCurrentInType = InputType.Content
     lateinit var mContentColor: String
-    lateinit var mStartColor: String
     lateinit var mEndColor: String
     var mIsGradient: Boolean = false
 
@@ -65,7 +60,6 @@ class ColorDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         val args = arguments
         mContentColor = args.getString(Args_contentColor, "#37474f")
-        mStartColor = args.getString(Args_startColor, "#37474f")
         mEndColor = args.getString(Args_endColor, "#37474f")
         mIsGradient = args.getBoolean(Args_isGradient, false)
     }
@@ -74,18 +68,15 @@ class ColorDialogFragment : DialogFragment() {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("选择颜色")
         val inflate = LayoutInflater.from(context).inflate(R.layout.dialog_color, null)
+        tvContentColor = inflate.findViewById(R.id.tv_contentColor)
         llContentColor = inflate.findViewById(R.id.ll_contentColor)
         vContentColor = inflate.findViewById(R.id.v_contentColor)
-        llStartColor = inflate.findViewById(R.id.ll_startColor)
-        vStartColor = inflate.findViewById(R.id.v_startColor)
-        tvStartColor = inflate.findViewById(R.id.tv_startColor)
         llEndColor = inflate.findViewById(R.id.ll_endColor)
         vEndColor = inflate.findViewById(R.id.v_endColor)
         val sDouble = inflate.findViewById<Switch>(R.id.s_double)
         crgColor = inflate.findViewById(R.id.crg_color)
 
         vContentColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(mContentColor))
-        vStartColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(mStartColor))
         vEndColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(mEndColor))
 
         //点击颜色按钮，设置颜色
@@ -96,10 +87,6 @@ class ColorDialogFragment : DialogFragment() {
                     InputType.Content -> {
                         vContentColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(str))
                         mContentColor = str
-                    }
-                    InputType.Start -> {
-                        vStartColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(str))
-                        mStartColor = str
                     }
                     InputType.End -> {
                         vEndColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(str))
@@ -131,22 +118,13 @@ class ColorDialogFragment : DialogFragment() {
 
         llContentColor.setOnClickListener { view ->
             view.background = ContextCompat.getDrawable(context, R.drawable.btn_color_dialog)
-            llStartColor.setBackgroundColor(Color.WHITE)
             llEndColor.setBackgroundColor(Color.WHITE)
             mCurrentInType = InputType.Content
             crgColor.setColor(mContentColor)
         }
-        llStartColor.setOnClickListener { view ->
-            view.background = ContextCompat.getDrawable(context, R.drawable.btn_color_dialog)
-            llContentColor.setBackgroundColor(Color.WHITE)
-            llEndColor.setBackgroundColor(Color.WHITE)
-            mCurrentInType = InputType.Start
-            crgColor.setColor(mStartColor)
-        }
         llEndColor.setOnClickListener { view ->
             view.background = ContextCompat.getDrawable(context, R.drawable.btn_color_dialog)
             llContentColor.setBackgroundColor(Color.WHITE)
-            llStartColor.setBackgroundColor(Color.WHITE)
             mCurrentInType = InputType.End
             crgColor.setColor(mEndColor)
         }
@@ -175,7 +153,7 @@ class ColorDialogFragment : DialogFragment() {
         builder.setPositiveButton("确定", { _: DialogInterface, _: Int ->
             run {
                 if (parentFragment is AddDialogFragment) {
-                    (parentFragment as AddDialogFragment).setColorData(mContentColor, mStartColor, mEndColor, sDouble.isChecked)
+                    (parentFragment as AddDialogFragment).setColorData(mContentColor, mContentColor, mEndColor, sDouble.isChecked)
                 }
             }
         })
@@ -185,14 +163,13 @@ class ColorDialogFragment : DialogFragment() {
     private fun changeSwitch(isChecked: Boolean) {
         mIsGradient = isChecked
         if (isChecked) {
-            tvStartColor.text = "倒计时初段颜色"
+            tvContentColor.text = "正文和倒计时初段颜色"
             llEndColor.animate().alpha(1f)
         } else {
-            tvStartColor.text = "倒计时颜色"
+            tvContentColor.text = "正文和倒计时颜色"
             llEndColor.animate().alpha(0f)
             if (mCurrentInType == InputType.End) {
                 llContentColor.background = ContextCompat.getDrawable(context, R.drawable.btn_color_dialog)
-                llStartColor.setBackgroundColor(Color.WHITE)
                 llEndColor.setBackgroundColor(Color.WHITE)
                 mCurrentInType = InputType.Content
                 crgColor.setColor(mContentColor)

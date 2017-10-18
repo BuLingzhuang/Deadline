@@ -20,7 +20,7 @@ class CircleProgressView : View {
     //    private var fillNum: Int = 0//总数值
 //    private var currentNum: Int = 0//当前数值
     private var sweepAngle: Float = 0f//圆环划过的角度
-//    private var lastAngle: Float = 0f//开始改变前划过角度
+    //    private var lastAngle: Float = 0f//开始改变前划过角度
     private var mCircleColorS: Int? = 0//起始环形颜色
     private var mCircleColorE: Int? = 0//结束环形颜色
     private var mDensity: Float = 0f//屏幕密度
@@ -33,23 +33,24 @@ class CircleProgressView : View {
     }
 
     fun setData(currentNum: Int, fillNum: Int) {
-        if (currentNum>0){
+        if (currentNum > 0) {
             val futureSweepAngle = currentNum * 333f / fillNum
             val duration = futureSweepAngle / 360 * 2333 + 233f
 //        lastAngle = sweepAngle
 //        val anim = ObjectAnimator.ofFloat(this, "sweepAngle", futureSweepAngle - sweepAngle)
             val anim = ObjectAnimator.ofFloat(this, "sweepAngle", futureSweepAngle)
-            if (duration>0){
+            if (duration > 0) {
                 anim.duration = Math.min(duration, 2000f).toLong()
-            }else{
+            } else {
                 anim.duration = 2000L
             }
             anim.interpolator = AccelerateDecelerateInterpolator()
             anim.start()
-        }else{
+        } else {
             setSweepAngle(0f)
         }
     }
+
     fun setDataNoAnim(currentNum: Int, fillNum: Int) {
         val futureSweepAngle = currentNum * 360f / fillNum
         sweepAngle = futureSweepAngle
@@ -85,6 +86,25 @@ class CircleProgressView : View {
         mCirclePaint.strokeCap = Paint.Cap.ROUND
         mCirclePaint.style = Paint.Style.STROKE
         mCircleBGPaint.style = Paint.Style.STROKE
+    }
+
+    /**
+     * 传入颜色（纯色）
+     */
+    fun setColor(color: String) {
+        val parseColor = Color.parseColor(color)
+        mCircleColorS = parseColor
+        mCircleColorE = parseColor
+        invalidate()
+    }
+
+    /**
+     * 传入颜色（渐变）
+     */
+    fun setColor(startColor: String, endColor: String) {
+        mCircleColorS = Color.parseColor(startColor)
+        mCircleColorE = Color.parseColor(endColor)
+        invalidate()
     }
 
     /**

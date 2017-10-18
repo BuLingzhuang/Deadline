@@ -1,5 +1,6 @@
 package com.bulingzhuang.deadline.views.adapters
 
+import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
@@ -51,6 +52,8 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
         if (hourOfDay != mHourOfDay || dayOfMonth != mDayOfMonth) {
             refreshTime = currentTimeMillis
+            mHourOfDay = hourOfDay
+            mDayOfMonth = dayOfMonth
             var invalidSize = 0
             mDataList.forEach {
                 if (it.showStatus == DeadlineModel.ShowStatus.OPEN && refreshTime > it.endTime) {
@@ -141,8 +144,18 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
                     }
                     openHolder.mTvDay.text = String.format(Locale.CHINA, "%dd", rDay)
                     openHolder.mTvHour.text = String.format(Locale.CHINA, "%dh", rHour)
-                    openHolder.mTvContent.setTextColor(ContextCompat.getColor(mContext, R.color.red500))
+                    openHolder.mTvContent.setTextColor(Color.parseColor(item.textColor))
                     openHolder.mTvEndTime.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+                    when (item.isGradient) {
+                        "true" -> {
+                            openHolder.mCpvDay.setColor(item.startColor,item.endColor)
+                            openHolder.mCpvHour.setColor(item.startColor,item.endColor)
+                        }
+                        else -> {
+                            openHolder.mCpvDay.setColor(item.startColor)
+                            openHolder.mCpvHour.setColor(item.startColor)
+                        }
+                    }
                 } else {
                     openHolder.mTvDay.text = ""
                     openHolder.mTvHour.text = ""
@@ -153,7 +166,7 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
                 val (endDay, endHour) = Tools.formatMillis2Str(item.endTime)
                 openHolder.mTvEndTime.text = String.format(Locale.CHINA, "至 %s %d时", endDay, endHour)
                 openHolder.itemView.setOnClickListener {
-                    ShowDialogFragment.newInstance(refreshTime,item).show(mContext.supportFragmentManager, "showDialog")
+                    ShowDialogFragment.newInstance(refreshTime, item).show(mContext.supportFragmentManager, "showDialog")
                 }
             }
             R.layout.adapter_main_valid -> {

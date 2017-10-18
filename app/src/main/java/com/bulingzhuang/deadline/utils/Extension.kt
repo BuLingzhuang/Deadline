@@ -48,7 +48,7 @@ fun Context.showSnakeBarWithAction(msg: String, genView: View, actionTitle: Stri
     val tvText = layout.findViewById<TextView>(android.support.design.R.id.snackbar_text)
     val tvAction = layout.findViewById<TextView>(android.support.design.R.id.snackbar_action)
     tvText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
-    tvAction.setTextColor(ContextCompat.getColor(this, R.color.yellow700))
+    tvAction.setTextColor(ContextCompat.getColor(this, R.color.amber600))
     snackBar.show()
 }
 

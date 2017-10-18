@@ -28,38 +28,11 @@
             android:background="@drawable/btn_color_dialog_bg"/>
 
         <TextView
+            android:id="@+id/tv_contentColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="正文颜色"
-            android:textColor="@color/colorPrimary"
-            android:textSize="15sp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_startColor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingEnd="12dp"
-        android:paddingStart="12dp"
-        android:paddingTop="5dp">
-
-        <View
-            android:id="@+id/v_startColor"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:background="@drawable/btn_color_dialog_bg"/>
-
-        <TextView
-            android:id="@+id/tv_startColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:text="倒计时颜色"
+            android:text="正文和倒计时初段颜色"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"/>
     </LinearLayout>

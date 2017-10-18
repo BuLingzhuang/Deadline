@@ -38,8 +38,8 @@
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:layout_centerInParent="true"
-                        app:circleColorE="@color/amber500"
-                        app:circleColorS="@color/red500"
+                        app:circleColorE="@color/amber600"
+                        app:circleColorS="@color/red600"
                         app:currentNum="23"
                         app:fillNum="31"
                         app:textCenter="true"/>
@@ -64,8 +64,8 @@
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:layout_centerInParent="true"
-                        app:circleColorE="@color/amber500"
-                        app:circleColorS="@color/red500"
+                        app:circleColorE="@color/amber600"
+                        app:circleColorS="@color/red600"
                         app:currentNum="3"
                         app:fillNum="24"
                         app:textCenter="true"/>
@@ -96,9 +96,10 @@
                     android:layout_alignParentEnd="true"
                     android:ellipsize="end"
                     android:lines="1"
+                    android:textStyle="bold"
                     android:maxWidth="200dp"
                     android:text="今天也在认真写代码"
-                    android:textColor="@color/red500"
+                    android:textColor="@color/red600"
                     android:textSize="16sp"
                     />
 

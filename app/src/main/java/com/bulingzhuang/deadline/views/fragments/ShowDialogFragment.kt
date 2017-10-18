@@ -2,6 +2,7 @@ package com.bulingzhuang.deadline.views.fragments
 
 import android.app.Dialog
 import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
@@ -61,10 +62,20 @@ class ShowDialogFragment : DialogFragment() {
             }
             tvDay.text = String.format(Locale.CHINA, "%dd", rDay)
             tvHour.text = String.format(Locale.CHINA, "%dh", rHour)
-            tvContent.setTextColor(ContextCompat.getColor(context, R.color.red500))
+            tvContent.setTextColor(Color.parseColor(mData.textColor))
             tvType.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
             tvStartDate.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
             tvEndDate.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            when (mData.isGradient) {
+                "true" -> {
+                    cpvDay.setColor(mData.startColor,mData.endColor)
+                    cpvHour.setColor(mData.startColor,mData.endColor)
+                }
+                else -> {
+                    cpvDay.setColor(mData.startColor)
+                    cpvHour.setColor(mData.startColor)
+                }
+            }
         } else {
             tvDay.text = ""
             tvHour.text = ""

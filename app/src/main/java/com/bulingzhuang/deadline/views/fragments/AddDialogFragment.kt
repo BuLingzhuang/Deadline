@@ -65,11 +65,11 @@ class AddDialogFragment : DialogFragment() {
     private var mLocalData: DeadlineModel? = null
 
     //三个颜色值
-    private var mContentColor: String = "#37474f"
-    private var mStartColor: String = "#37474f"
-    private var mEndColor: String = "#37474f"
+    private var mContentColor: String = "#dd191d"
+    private var mStartColor: String = "#dd191d"
+    private var mEndColor: String = "#ffb300"
     //是否使用渐变色
-    private var mIsGradient: Boolean = false
+    private var mIsGradient: Boolean = true
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val arguments = arguments
@@ -98,7 +98,7 @@ class AddDialogFragment : DialogFragment() {
         mTvEndDate = inflate.findViewById(R.id.tv_endDate)
 
         mBtnColor.setOnClickListener {
-            ColorDialogFragment.newInstance(mIsGradient, mContentColor, mStartColor, mEndColor).show(childFragmentManager, "colorDialog")
+            ColorDialogFragment.newInstance(mIsGradient, mContentColor, mEndColor).show(childFragmentManager, "colorDialog")
         }
 
         mSpType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
