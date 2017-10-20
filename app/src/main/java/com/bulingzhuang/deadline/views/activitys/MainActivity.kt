@@ -1,5 +1,6 @@
 package com.bulingzhuang.deadline.views.activitys
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -81,12 +82,16 @@ class MainActivity : AppCompatActivity(), MainView {
                 mPresenter.showDialog(this, null)
                 return true
             }
-            R.id.action_accurateUpdate -> {//精确更新
-                //TODO 根据对勾使用系统默认的30分钟更新，或者开启服务，一分钟刷新一次(稍微耗电)
+//            R.id.action_accurateUpdate -> {//精确更新
+//                //TODO 根据对勾使用系统默认的30分钟更新，或者开启服务，一分钟刷新一次(稍微耗电)
+//                return true
+//            }
+            R.id.action_feelingLucky -> {//试试手气
+                //TODO 随机变换默认颜色
                 return true
             }
-            R.id.action_feelingLucky -> {//试试手气
-                //TODO 随机变换颜色
+            R.id.action_settings -> {//设置
+                startActivity(Intent(this,SettingActivity::class.java))
                 return true
             }
             R.id.action_about -> {//关于

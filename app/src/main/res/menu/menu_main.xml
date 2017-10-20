@@ -8,23 +8,24 @@
         android:icon="@drawable/ic_add_black_24dp"
         android:orderInCategory="1"
         android:title="@string/add"/>
-    <item
-        android:id="@+id/action_accurateUpdate"
-        android:checkable="true"
-        android:orderInCategory="2"
-        android:title="@string/action_accurateUpdate"/>
+    <!--<item-->
+        <!--android:id="@+id/action_accurateUpdate"-->
+        <!--android:checkable="true"-->
+        <!--android:orderInCategory="2"-->
+        <!--android:title="@string/action_accurateUpdate"/>-->
 
+    <!-- 弹出SnakeBar，附带撤销按钮 -->
     <item
         android:id="@+id/action_feelingLucky"
         android:orderInCategory="3"
         android:title="@string/action_feelingLucky"
         app:showAsAction="never"/>
 
-    <!--<item-->
-    <!--android:id="@+id/action_settings"-->
-    <!--android:orderInCategory="4"-->
-    <!--android:title="@string/action_settings"-->
-    <!--app:showAsAction="never"/>-->
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="4"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_about"
         android:orderInCategory="5"

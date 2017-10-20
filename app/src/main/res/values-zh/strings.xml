@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Deadline</string>
     <string name="action_settings">设置</string>
-    <string name="action_accurateUpdate">精确更新</string>
+    <string name="setting_accurateUpdate">精确更新</string>
     <string name="appwidget_text">实例</string>
     <string name="add_widget">小组件</string>
     <string name="action_feelingLucky">试试手气</string>

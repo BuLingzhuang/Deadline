@@ -6,6 +6,7 @@
         <attr name="circleColorS" format="color"/>
         <attr name="circleColorE" format="color"/>
         <attr name="textCenter" format="boolean"/>
+        <attr name="icon" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="TEMPView">

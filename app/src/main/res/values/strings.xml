@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Deadline</string>
     <string name="action_settings">Settings</string>
-    <string name="action_accurateUpdate">Accurate Update</string>
+    <string name="setting_accurateUpdate">Accurate Update</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="action_feelingLucky">Feeling Lucky</string>

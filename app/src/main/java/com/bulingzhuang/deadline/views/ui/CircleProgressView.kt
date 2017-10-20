@@ -3,12 +3,14 @@ package com.bulingzhuang.deadline.views.ui
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.bulingzhuang.deadline.R
+import com.bulingzhuang.deadline.utils.showLogE
 
 /**
  * Created by bulingzhuang
@@ -25,6 +27,7 @@ class CircleProgressView : View {
     private var mCircleColorE: Int? = 0//结束环形颜色
     private var mDensity: Float = 0f//屏幕密度
     private var mCircleRatio: Float = 0f//圆环宽度占比
+    private var mIconId = 0 //中心图标id
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
@@ -66,6 +69,7 @@ class CircleProgressView : View {
     }
 
     private val mCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mIconPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mCircleBGPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mCirclePath = Path()
     private val mCircleBGPath = Path()
@@ -76,6 +80,8 @@ class CircleProgressView : View {
     companion object {
         private val sCircleRatioTC = 6.6f
         private val sCircleRatioNTC = 4.4f
+        private val sIconRatio = 0.6f //中间图标占比
+        private val sBgGradualRotate = 105f //渐变背景旋转角度
     }
 
     /**
@@ -117,6 +123,11 @@ class CircleProgressView : View {
         sweepAngle = currentNum * 360f / fillNum
         mCircleColorS = typedArray.getColor(R.styleable.CircleProgressView_circleColorS, ContextCompat.getColor(context, R.color.colorPrimary))
         mCircleColorE = typedArray.getColor(R.styleable.CircleProgressView_circleColorE, ContextCompat.getColor(context, R.color.colorPrimary))
+        val iconId = typedArray.getResourceId(R.styleable.CircleProgressView_icon, R.mipmap.ic_launcher_foreground)
+        if (iconId != R.mipmap.ic_launcher_foreground) {
+            mIconId = iconId
+        }
+
         val textCenter = typedArray.getBoolean(R.styleable.CircleProgressView_textCenter, false)
         mCircleRatio = if (textCenter) {
             sCircleRatioTC
@@ -143,6 +154,23 @@ class CircleProgressView : View {
 //        mCirclePaint.color = ContextCompat.getColor(context,R.color.red500)
         mCircleBGPaint.color = Color.parseColor("#e9e9e9")
 
+        if (mIconId != 0) {
+            val realBitmap = BitmapFactory.decodeResource(resources, mIconId)
+            val matrix = Matrix()
+            val maxLength = Math.max(realBitmap.width, realBitmap.height)
+            val realLength = (Math.cos(2 * Math.PI / 360 * 15) + Math.sin(2 * Math.PI / 360 * 15)) * maxLength
+            val min = Math.min(w.toFloat() / realLength, h.toFloat() / realLength).toFloat() * sIconRatio
+//            showLogE("图片实际尺寸：w=${realBitmap.width}，h=${realBitmap.height}")
+//            showLogE("min=$min，处理后长度：${min * realBitmap.width}")
+            matrix.postScale(min, min)
+            matrix.postRotate(sBgGradualRotate)
+            val bitmap = Bitmap.createBitmap(realBitmap, 0, 0, realBitmap.width, realBitmap.height, matrix, true)
+//            showLogE("控件的宽高：w=$w，h=$h；icon的宽高：w=${bitmap.width}，h=${bitmap.height}")
+            val bitmapShader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+            val composeShader = ComposeShader(shader, bitmapShader, PorterDuff.Mode.DST_IN)
+            mIconPaint.shader = composeShader
+        }
+
         mCircleBGPath.reset()
         mCircleBGPath.addCircle(w / 2f, h / 2f, minEdgeLen / 2f - minEdgeLen / mCircleRatio / 2f, Path.Direction.CW)
 
@@ -156,11 +184,17 @@ class CircleProgressView : View {
         setPath(minEdgeLen)
         if (canvas != null) {
             canvas.save()
-            canvas.rotate(-105f, width / 2f, height / 2f)
+            canvas.rotate(-sBgGradualRotate, width / 2f, height / 2f)
             canvas.drawPath(mCircleBGPath, mCircleBGPaint)
             canvas.drawPath(mCirclePath, mCirclePaint)
-            canvas.rotate(105f, width / 2f, height / 2f)
+            if (mIconId != 0) {
+                canvas.translate(width.toFloat() * (1 - sIconRatio) / 2, height.toFloat() * (1 - sIconRatio) / 2)
+                canvas.drawRect(0f, 0f, width.toFloat() * sIconRatio, height.toFloat() * sIconRatio, mIconPaint)
+                canvas.translate(-width.toFloat() * (1 - sIconRatio) / 2, -height.toFloat() * (1 - sIconRatio) / 2)
+            }
+            canvas.rotate(sBgGradualRotate, width / 2f, height / 2f)
             canvas.restore()
+
         }
     }
 
