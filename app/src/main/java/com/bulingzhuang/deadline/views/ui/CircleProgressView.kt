@@ -73,6 +73,7 @@ class CircleProgressView : View {
     private val mCircleBGPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mCirclePath = Path()
     private val mCircleBGPath = Path()
+    private lateinit var mBitmapShader: BitmapShader
 
     /**
      * 静态
@@ -110,6 +111,7 @@ class CircleProgressView : View {
     fun setColor(startColor: String, endColor: String) {
         mCircleColorS = Color.parseColor(startColor)
         mCircleColorE = Color.parseColor(endColor)
+        refreshShader()
         invalidate()
     }
 
@@ -145,13 +147,24 @@ class CircleProgressView : View {
         setMeasuredDimension(width, height)
     }
 
+    /**
+     * 刷新shader
+     */
+    private fun refreshShader() {
+        val minEdgeLen = Math.min(width, height)
+        val shader = SweepGradient(minEdgeLen / 2f, minEdgeLen / 2f, mCircleColorS!!, mCircleColorE!!)
+        mCirclePaint.shader = shader
+
+        if (mIconId != 0) {
+            val composeShader = ComposeShader(shader, mBitmapShader, PorterDuff.Mode.DST_IN)
+            mIconPaint.shader = composeShader
+        }
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         val minEdgeLen = Math.min(width, height)
 
-        val shader = SweepGradient(minEdgeLen / 2f, minEdgeLen / 2f, mCircleColorS!!, mCircleColorE!!)
-        mCirclePaint.shader = shader
-//        mCirclePaint.color = ContextCompat.getColor(context,R.color.red500)
         mCircleBGPaint.color = Color.parseColor("#e9e9e9")
 
         if (mIconId != 0) {
@@ -159,17 +172,17 @@ class CircleProgressView : View {
             val matrix = Matrix()
             val maxLength = Math.max(realBitmap.width, realBitmap.height)
             val realLength = (Math.cos(2 * Math.PI / 360 * 15) + Math.sin(2 * Math.PI / 360 * 15)) * maxLength
-            val min = Math.min(w.toFloat() / realLength, h.toFloat() / realLength).toFloat() * sIconRatio
+            val min = Math.min(width.toFloat() / realLength, height.toFloat() / realLength).toFloat() * sIconRatio
 //            showLogE("图片实际尺寸：w=${realBitmap.width}，h=${realBitmap.height}")
 //            showLogE("min=$min，处理后长度：${min * realBitmap.width}")
             matrix.postScale(min, min)
             matrix.postRotate(sBgGradualRotate)
             val bitmap = Bitmap.createBitmap(realBitmap, 0, 0, realBitmap.width, realBitmap.height, matrix, true)
 //            showLogE("控件的宽高：w=$w，h=$h；icon的宽高：w=${bitmap.width}，h=${bitmap.height}")
-            val bitmapShader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
-            val composeShader = ComposeShader(shader, bitmapShader, PorterDuff.Mode.DST_IN)
-            mIconPaint.shader = composeShader
+            mBitmapShader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         }
+
+        refreshShader()
 
         mCircleBGPath.reset()
         mCircleBGPath.addCircle(w / 2f, h / 2f, minEdgeLen / 2f - minEdgeLen / mCircleRatio / 2f, Path.Direction.CW)
