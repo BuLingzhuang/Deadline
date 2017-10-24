@@ -73,7 +73,7 @@ class CircleProgressView : View {
     private val mCircleBGPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mCirclePath = Path()
     private val mCircleBGPath = Path()
-    private lateinit var mBitmapShader: BitmapShader
+    private var mBitmapShader: BitmapShader? = null
 
     /**
      * 静态
@@ -102,6 +102,7 @@ class CircleProgressView : View {
         val parseColor = Color.parseColor(color)
         mCircleColorS = parseColor
         mCircleColorE = parseColor
+        refreshShader()
         invalidate()
     }
 
@@ -155,7 +156,7 @@ class CircleProgressView : View {
         val shader = SweepGradient(minEdgeLen / 2f, minEdgeLen / 2f, mCircleColorS!!, mCircleColorE!!)
         mCirclePaint.shader = shader
 
-        if (mIconId != 0) {
+        if (mIconId != 0 && mBitmapShader != null) {
             val composeShader = ComposeShader(shader, mBitmapShader, PorterDuff.Mode.DST_IN)
             mIconPaint.shader = composeShader
         }

@@ -1,18 +1,23 @@
 package com.bulingzhuang.deadline.views.activitys
 
-import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.bulingzhuang.deadline.R
-import com.bulingzhuang.deadline.utils.showLogE
-import com.bulingzhuang.deadline.utils.showSnakeBar
+import com.bulingzhuang.deadline.bean.DeadlineModel
+import com.bulingzhuang.deadline.bean.TypeColorModel
+import com.bulingzhuang.deadline.utils.Constants
+import com.bulingzhuang.deadline.utils.SharePreferencesUtil
 import com.bulingzhuang.deadline.views.fragments.ColorDialogFragment
+import com.bulingzhuang.deadline.views.ui.CircleProgressView
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_setting.*
 
 class SettingActivity : AppCompatActivity() {
+
+    private lateinit var mColorModelList: ArrayList<TypeColorModel.ColorModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +26,9 @@ class SettingActivity : AppCompatActivity() {
     }
 
     private fun init() {
+
+        getDefaultColor()
+
         val set = AnimatorSet()
         val workAnim = ObjectAnimator.ofFloat(cpv_work, "alpha", 0f, 1f).setDuration(1000)
         val festivalAnim = ObjectAnimator.ofFloat(cpv_festival, "alpha", 0f, 1f).setDuration(1000)
@@ -34,16 +42,6 @@ class SettingActivity : AppCompatActivity() {
         val familyRotation = ObjectAnimator.ofFloat(cpv_family, "rotationY", -180f, 0f).setDuration(1000)
         val otherRotation = ObjectAnimator.ofFloat(cpv_other, "rotationY", -180f, 0f).setDuration(1000)
         val delayDuration = 233L
-        var tag = true
-        otherRotation.addUpdateListener {
-            val fl = it.animatedValue as Float
-            showLogE("value=$fl")
-            if (Math.abs(fl) < 90 && tag) {
-                cpv_other.setColor("#37474f", "#37474f")
-                tag = false
-                showLogE("执行了")
-            }
-        }
         workAnim.startDelay = 0L
         workRotation.startDelay = 0L
         festivalAnim.startDelay = delayDuration
@@ -75,32 +73,136 @@ class SettingActivity : AppCompatActivity() {
         setCpvListener(cpv_work, cpv_festival, cpv_birthday, cpv_family, cpv_other)
     }
 
+    /**
+     * 取默认颜色
+     */
+    private fun getDefaultColor() {
+        val data = SharePreferencesUtil.getString(Constants.DEFAULT_COLOR_DATA)
+        if (data.isNotEmpty()) {
+            val colorModel = Gson().fromJson(data, TypeColorModel::class.java)
+            mColorModelList = colorModel.typeList
+        } else {
+            mColorModelList = ArrayList()
+            mColorModelList.add(TypeColorModel.ColorModel(DeadlineModel.Type.WORK.typeName, true, "#c0ca33", "#00897b"))
+            mColorModelList.add(TypeColorModel.ColorModel(DeadlineModel.Type.FESTIVAL.typeName, true, "#00897b", "#4e6cef"))
+            mColorModelList.add(TypeColorModel.ColorModel(DeadlineModel.Type.BIRTHDAY.typeName, true, "#4e6cef", "#8e24aa"))
+            mColorModelList.add(TypeColorModel.ColorModel(DeadlineModel.Type.FAMILY.typeName, true, "#8e24aa", "#f4511e"))
+            mColorModelList.add(TypeColorModel.ColorModel(DeadlineModel.Type.OTHER.typeName, true, "#f4511e", "#fdd835"))
+        }
+
+        mColorModelList.forEach {
+            when (it.typeName) {
+                DeadlineModel.Type.WORK.typeName -> {
+                    handleColor(cpv_work, it)
+                }
+                DeadlineModel.Type.FESTIVAL.typeName -> {
+                    handleColor(cpv_festival, it)
+                }
+                DeadlineModel.Type.BIRTHDAY.typeName -> {
+                    handleColor(cpv_birthday, it)
+                }
+                DeadlineModel.Type.FAMILY.typeName -> {
+                    handleColor(cpv_family, it)
+                }
+                DeadlineModel.Type.OTHER.typeName -> {
+                    handleColor(cpv_other, it)
+                }
+            }
+        }
+    }
+
+    /**
+     * 把颜色设置到布局上
+     */
+    private fun handleColor(view: CircleProgressView, model: TypeColorModel.ColorModel) {
+        if (model.isGradient) {
+            view.setColor(model.contentColor, model.endColor)
+        } else {
+            view.setColor(model.contentColor)
+        }
+    }
+
+    /**
+     * 修改默认颜色
+     */
+    fun setDefaultColor(model: TypeColorModel.ColorModel) {
+        when (model.typeName) {
+            DeadlineModel.Type.WORK.typeName -> {
+                handleColorWithAnim(cpv_work, model)
+            }
+            DeadlineModel.Type.FESTIVAL.typeName -> {
+                handleColorWithAnim(cpv_festival, model)
+            }
+            DeadlineModel.Type.BIRTHDAY.typeName -> {
+                handleColorWithAnim(cpv_birthday, model)
+            }
+            DeadlineModel.Type.FAMILY.typeName -> {
+                handleColorWithAnim(cpv_family, model)
+            }
+            DeadlineModel.Type.OTHER.typeName -> {
+                handleColorWithAnim(cpv_other, model)
+            }
+        }
+    }
+
+    /**
+     * 保存修改后的颜色
+     */
+    private fun handleColorWithAnim(view: CircleProgressView, model: TypeColorModel.ColorModel) {
+        mColorModelList.filter { it.typeName == model.typeName }.map {
+            it.contentColor = model.contentColor
+            it.endColor = model.endColor
+            it.isGradient = model.isGradient
+        }
+        val json = Gson().toJson(TypeColorModel(mColorModelList))
+        SharePreferencesUtil.setValue(this,Constants.DEFAULT_COLOR_DATA,json)
+
+        val rotation = ObjectAnimator.ofFloat(view, "rotationY", -180f, 0f).setDuration(1000)
+        rotation.addUpdateListener {
+            val fl = it.animatedValue as Float
+            if (Math.abs(fl) < 90) {
+                if (model.isGradient) {
+                    view.setColor(model.contentColor, model.endColor)
+                } else {
+                    view.setColor(model.contentColor)
+                }
+            }
+        }
+        rotation.start()
+    }
 
     /**
      * 设置默认颜色的点击监听
      */
     private fun setCpvListener(vararg views: View) {
         val cpvListener = View.OnClickListener { view ->
-            when (view.id) {
-                R.id.cpv_work -> {
-                    showSnakeBar("work", ll_gen)
-//                    ColorDialogFragment.newInstance(mIsGradient, mContentColor, mEndColor).show(supportFragmentManager, "colorDialog")
-                }
-                R.id.cpv_festival -> {
-                    showSnakeBar("festival", ll_gen)
-                }
-                R.id.cpv_birthday -> {
-                    showSnakeBar("birthday", ll_gen)
-                }
-                R.id.cpv_family -> {
-                    showSnakeBar("family", ll_gen)
-                }
-                R.id.cpv_other -> {
-                    showSnakeBar("other", ll_gen)
-                }
-            }
+            intent2ColorDialog(view.id)
         }
 
         views.forEach { it.setOnClickListener(cpvListener) }
+    }
+
+    private fun intent2ColorDialog(id: Int) {
+        var data: TypeColorModel.ColorModel? = null
+        when (id) {
+            R.id.cpv_work -> {
+                mColorModelList.filter { it.typeName == DeadlineModel.Type.WORK.typeName }.forEach { data = it }
+            }
+            R.id.cpv_festival -> {
+                mColorModelList.filter { it.typeName == DeadlineModel.Type.FESTIVAL.typeName }.forEach { data = it }
+            }
+            R.id.cpv_birthday -> {
+                mColorModelList.filter { it.typeName == DeadlineModel.Type.BIRTHDAY.typeName }.forEach { data = it }
+            }
+            R.id.cpv_family -> {
+                mColorModelList.filter { it.typeName == DeadlineModel.Type.FAMILY.typeName }.forEach { data = it }
+            }
+            R.id.cpv_other -> {
+                mColorModelList.filter { it.typeName == DeadlineModel.Type.OTHER.typeName }.forEach { data = it }
+            }
+        }
+        if (data != null) {
+            ColorDialogFragment.newInstance(data!!).show(supportFragmentManager, "colorDialog")
+        }
     }
 }

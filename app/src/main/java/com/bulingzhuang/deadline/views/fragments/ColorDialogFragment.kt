@@ -15,6 +15,8 @@ import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
 import com.bulingzhuang.deadline.R
+import com.bulingzhuang.deadline.bean.TypeColorModel
+import com.bulingzhuang.deadline.views.activitys.SettingActivity
 import com.bulingzhuang.deadline.views.ui.ColorRadioGroup
 
 /**
@@ -25,14 +27,10 @@ import com.bulingzhuang.deadline.views.ui.ColorRadioGroup
 class ColorDialogFragment : DialogFragment() {
 
     companion object {
-        val Args_contentColor = "Args_contentColor"
-        val Args_endColor = "endColor"
-        val Args_isGradient = "isGradient"
-        fun newInstance(isGradient: Boolean, contentColor: String = "#37474f", endColor: String = "#37474f"): ColorDialogFragment {
+        val Args_data = "Args_data"
+        fun newInstance(data: TypeColorModel.ColorModel): ColorDialogFragment {
             val args = Bundle()
-            args.putString(Args_contentColor, contentColor)
-            args.putString(Args_endColor, endColor)
-            args.putBoolean(Args_isGradient, isGradient)
+            args.putSerializable(Args_data, TypeColorModel.ColorModel(data.typeName,data.isGradient,data.contentColor,data.endColor))
             val fragment = ColorDialogFragment()
             fragment.arguments = args
             return fragment
@@ -44,24 +42,20 @@ class ColorDialogFragment : DialogFragment() {
         Content, End
     }
 
-    lateinit var tvContentColor:TextView
+    lateinit var tvContentColor: TextView
     lateinit var llContentColor: LinearLayout
     lateinit var llEndColor: LinearLayout
     lateinit var vContentColor: View
     lateinit var vEndColor: View
     lateinit var crgColor: ColorRadioGroup
     var mCurrentInType = InputType.Content
-    lateinit var mContentColor: String
-    lateinit var mEndColor: String
-    var mIsGradient: Boolean = false
+    lateinit var mData: TypeColorModel.ColorModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val args = arguments
-        mContentColor = args.getString(Args_contentColor, "#37474f")
-        mEndColor = args.getString(Args_endColor, "#37474f")
-        mIsGradient = args.getBoolean(Args_isGradient, false)
+        mData = args.getSerializable(Args_data) as TypeColorModel.ColorModel
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -76,21 +70,20 @@ class ColorDialogFragment : DialogFragment() {
         val sDouble = inflate.findViewById<Switch>(R.id.s_double)
         crgColor = inflate.findViewById(R.id.crg_color)
 
-        vContentColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(mContentColor))
-        vEndColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(mEndColor))
+        vContentColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(mData.contentColor))
+        vEndColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(mData.endColor))
 
         //点击颜色按钮，设置颜色
         crgColor.setOnViewClickListener(object : ColorRadioGroup.OnViewClickListener {
             override fun onClick(str: String) {
-
                 when (mCurrentInType) {
                     InputType.Content -> {
                         vContentColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(str))
-                        mContentColor = str
+                        mData.contentColor = str
                     }
                     InputType.End -> {
                         vEndColor.backgroundTintList = ColorStateList.valueOf(Color.parseColor(str))
-                        mEndColor = str
+                        mData.endColor = str
                     }
                 }
             }
@@ -114,23 +107,24 @@ class ColorDialogFragment : DialogFragment() {
             }
         })
 
-        //点击字段，切换颜色选择器
+        crgColor.setColor(mData.contentColor)
 
+        //点击字段，切换颜色选择器
         llContentColor.setOnClickListener { view ->
             view.background = ContextCompat.getDrawable(context, R.drawable.btn_color_dialog)
             llEndColor.setBackgroundColor(Color.WHITE)
             mCurrentInType = InputType.Content
-            crgColor.setColor(mContentColor)
+            crgColor.setColor(mData.contentColor)
         }
         llEndColor.setOnClickListener { view ->
             view.background = ContextCompat.getDrawable(context, R.drawable.btn_color_dialog)
             llContentColor.setBackgroundColor(Color.WHITE)
             mCurrentInType = InputType.End
-            crgColor.setColor(mEndColor)
+            crgColor.setColor(mData.endColor)
         }
 
-        sDouble.isChecked = mIsGradient
-        if (mIsGradient) {
+        sDouble.isChecked = mData.isGradient
+        if (mData.isGradient) {
             llEndColor.alpha = 1f
             llEndColor.visibility = View.VISIBLE
         } else {
@@ -152,8 +146,8 @@ class ColorDialogFragment : DialogFragment() {
         })
         builder.setPositiveButton("确定", { _: DialogInterface, _: Int ->
             run {
-                if (parentFragment is AddDialogFragment) {
-                    (parentFragment as AddDialogFragment).setColorData(mContentColor, mContentColor, mEndColor, sDouble.isChecked)
+                if (activity is SettingActivity) {
+                    (activity as SettingActivity).setDefaultColor(mData)
                 }
             }
         })
@@ -161,7 +155,7 @@ class ColorDialogFragment : DialogFragment() {
     }
 
     private fun changeSwitch(isChecked: Boolean) {
-        mIsGradient = isChecked
+        mData.isGradient = isChecked
         if (isChecked) {
             tvContentColor.text = "正文和倒计时初段颜色"
             llEndColor.animate().alpha(1f)
@@ -172,7 +166,7 @@ class ColorDialogFragment : DialogFragment() {
                 llContentColor.background = ContextCompat.getDrawable(context, R.drawable.btn_color_dialog)
                 llEndColor.setBackgroundColor(Color.WHITE)
                 mCurrentInType = InputType.Content
-                crgColor.setColor(mContentColor)
+                crgColor.setColor(mData.contentColor)
             }
         }
     }

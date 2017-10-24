@@ -51,7 +51,7 @@ class ColorRadioGroup : View {
     /**
      * 传入颜色
      */
-    public fun setColor(color: String) {
+     fun setColor(color: String) {
         mCheckPosition = mColorList.indices.firstOrNull { mColorList[it] == color } ?: -1
         invalidate()
     }

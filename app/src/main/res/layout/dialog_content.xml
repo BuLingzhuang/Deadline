@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingEnd="8dp"
+        android:paddingEnd="16dp"
         android:paddingStart="16dp">
 
         <EditText
@@ -26,12 +26,12 @@
             android:textColorHint="@color/colorPrimaryAlpha"
             android:textSize="15sp"/>
 
-        <ImageView
-            android:id="@+id/btn_color"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="10dp"
-            app:srcCompat="@drawable/ic_color_lens_black_alpha_24dp"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/btn_color"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:padding="10dp"-->
+            <!--app:srcCompat="@drawable/ic_color_lens_black_alpha_24dp"/>-->
     </LinearLayout>
 
     <LinearLayout

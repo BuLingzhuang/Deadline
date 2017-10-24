@@ -9,4 +9,5 @@ object Constants {
     //SharedPreference key
     val DEADLINE_SHARED_PREFERENCES = "com.bulingzhuang.deadline.shared_preferences"
     val MAIN_LAST_WEATHER_REFRESH_DATA = "main_last_weather_refresh_time"
+    val DEFAULT_COLOR_DATA = "default_color_time"
 }

@@ -90,16 +90,16 @@ class AddDialogFragment : DialogFragment() {
         builder.setTitle(dialogType)
         val inflate = LayoutInflater.from(context).inflate(R.layout.dialog_content, null)
         mEtContent = inflate.findViewById(R.id.et_content)
-        mBtnColor = inflate.findViewById(R.id.btn_color)
+//        mBtnColor = inflate.findViewById(R.id.btn_color)
         mSpType = inflate.findViewById(R.id.sp_type)
         mSpStartHour = inflate.findViewById(R.id.sp_startHour)
         mSpEndHour = inflate.findViewById(R.id.sp_endHour)
         mTvStartDate = inflate.findViewById(R.id.tv_startDate)
         mTvEndDate = inflate.findViewById(R.id.tv_endDate)
 
-        mBtnColor.setOnClickListener {
-            ColorDialogFragment.newInstance(mIsGradient, mContentColor, mEndColor).show(childFragmentManager, "colorDialog")
-        }
+//        mBtnColor.setOnClickListener {
+//            ColorDialogFragment.newInstance(mIsGradient, mContentColor, mEndColor).show(childFragmentManager, "colorDialog")
+//        }
 
         mSpType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
