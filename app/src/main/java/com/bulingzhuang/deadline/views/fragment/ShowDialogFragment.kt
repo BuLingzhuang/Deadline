@@ -1,4 +1,4 @@
-package com.bulingzhuang.deadline.views.fragments
+package com.bulingzhuang.deadline.views.fragment
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -11,9 +11,13 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import com.bulingzhuang.deadline.R
 import com.bulingzhuang.deadline.bean.DeadlineModel
+import com.bulingzhuang.deadline.bean.TypeColorModel
+import com.bulingzhuang.deadline.utils.Constants
+import com.bulingzhuang.deadline.utils.SharePreferencesUtil
 import com.bulingzhuang.deadline.utils.Tools
-import com.bulingzhuang.deadline.views.activitys.MainActivity
+import com.bulingzhuang.deadline.views.activity.MainActivity
 import com.bulingzhuang.deadline.views.ui.CircleProgressView
+import com.google.gson.Gson
 import java.util.*
 
 /**
@@ -54,6 +58,23 @@ class ShowDialogFragment : DialogFragment() {
         var (rDay, rHour) = Tools.computeTime(currentMillis, mData.endTime)
         val (rFillDay, _) = Tools.computeTime(mData.startTime, mData.endTime)
 
+        val data = SharePreferencesUtil.getString(Constants.SP_DEFAULT_COLOR_DATA)
+        val colorList = if (data.isNotEmpty()) {
+            val colorModel = Gson().fromJson(data, TypeColorModel::class.java)
+            colorModel.typeList
+        } else {
+            val list = ArrayList<TypeColorModel.ColorModel>()
+            list.add(TypeColorModel.ColorModel(DeadlineModel.Type.WORK.typeName, true, "#c0ca33", "#00897b"))
+            list.add(TypeColorModel.ColorModel(DeadlineModel.Type.FESTIVAL.typeName, true, "#00897b", "#4e6cef"))
+            list.add(TypeColorModel.ColorModel(DeadlineModel.Type.BIRTHDAY.typeName, true, "#4e6cef", "#8e24aa"))
+            list.add(TypeColorModel.ColorModel(DeadlineModel.Type.FAMILY.typeName, true, "#8e24aa", "#f4511e"))
+            list.add(TypeColorModel.ColorModel(DeadlineModel.Type.OTHER.typeName, true, "#f4511e", "#fdd835"))
+            list
+        }
+
+        var model:TypeColorModel.ColorModel?=null
+        colorList.filter { it.typeName ==mData.type.typeName }.forEach { model = it }
+
         cpvDay.setData(rDay, rFillDay)
         cpvHour.setData(rHour, 24)
         if (rDay >= 0 && rHour >= 0) {
@@ -62,18 +83,17 @@ class ShowDialogFragment : DialogFragment() {
             }
             tvDay.text = String.format(Locale.CHINA, "%dd", rDay)
             tvHour.text = String.format(Locale.CHINA, "%dh", rHour)
-            tvContent.setTextColor(Color.parseColor(mData.textColor))
+            tvContent.setTextColor(Color.parseColor(model?.contentColor))
             tvType.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
             tvStartDate.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
             tvEndDate.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
-            when (mData.isGradient) {
-                "true" -> {
-                    cpvDay.setColor(mData.startColor,mData.endColor)
-                    cpvHour.setColor(mData.startColor,mData.endColor)
-                }
-                else -> {
-                    cpvDay.setColor(mData.startColor)
-                    cpvHour.setColor(mData.startColor)
+            if (model != null) {
+                if (model!!.isGradient){
+                    cpvDay.setColor(model!!.contentColor, model!!.endColor)
+                    cpvHour.setColor(model!!.contentColor, model!!.endColor)
+                }else{
+                    cpvDay.setColor(model!!.contentColor)
+                    cpvHour.setColor(model!!.contentColor)
                 }
             }
         } else {

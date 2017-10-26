@@ -1,190 +1,355 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_gen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    android:id="@+id/ll_gen"
-    tools:context="com.bulingzhuang.deadline.views.activitys.SettingActivity">
+    tools:context="com.bulingzhuang.deadline.views.activity.SettingActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/abl_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:title=" ">
+            </android.support.v7.widget.Toolbar>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="60dp"
+                android:text="@string/action_settings"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_back"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:padding="14dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_arrow_back_24dp"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/abl_bar"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/setting_accurateUpdate"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/cb_accurateUpdate"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:checked="false"/>
+        </RelativeLayout>
+
+        <View
+            style="@style/view_horizontal_margin_16"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_defaultCity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/setting_default_city"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_defaultCity"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_setting_default_city"
+                android:gravity="center_vertical"
+                android:paddingEnd="12dp"
+                android:paddingStart="12dp"
+                android:text="洛阳"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"/>
+
+
+        </RelativeLayout>
+
+        <View
+            style="@style/view_horizontal_margin_16"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_defaultColor"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/setting_default_color"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:id="@+id/iv_defaultColor"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_keyboard_arrow_up_black_24dp"/>
+        </RelativeLayout>
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/fl_defaultColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:visibility="gone"
+            app:alignContent="flex_start"
+            app:alignItems="flex_start"
+            app:flexDirection="row"
+            app:flexWrap="wrap"
+            app:showDivider="middle">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:layout_marginTop="6dp"
+                app:layout_flexBasisPercent="35%">
+
+                <com.bulingzhuang.deadline.views.ui.CircleProgressView
+                    android:id="@+id/cpv_work"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:alpha="0"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    app:circleColorE="@color/lime600"
+                    app:circleColorS="@color/teal600"
+                    app:currentNum="328"
+                    app:fillNum="360"
+                    app:icon="@mipmap/type_work"
+                    app:textCenter="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:layout_marginTop="6dp"
+                app:layout_flexBasisPercent="30%">
+
+                <com.bulingzhuang.deadline.views.ui.CircleProgressView
+                    android:id="@+id/cpv_festival"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:alpha="0"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    app:circleColorE="@color/teal600"
+                    app:circleColorS="@color/blue600"
+                    app:currentNum="328"
+                    app:fillNum="360"
+                    app:icon="@mipmap/type_festival"
+                    app:textCenter="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:layout_marginTop="6dp"
+                app:layout_flexBasisPercent="35%">
+
+                <com.bulingzhuang.deadline.views.ui.CircleProgressView
+                    android:id="@+id/cpv_birthday"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:alpha="0"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    app:circleColorE="@color/blue600"
+                    app:circleColorS="@color/purple600"
+                    app:currentNum="328"
+                    app:fillNum="360"
+                    app:icon="@mipmap/type_birthday"
+                    app:textCenter="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:layout_marginTop="6dp"
+                app:layout_flexBasisPercent="35%">
+
+                <com.bulingzhuang.deadline.views.ui.CircleProgressView
+                    android:id="@+id/cpv_family"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:alpha="0"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    app:circleColorE="@color/purple600"
+                    app:circleColorS="@color/deeporange600"
+                    app:currentNum="328"
+                    app:fillNum="360"
+                    app:icon="@mipmap/type_family"
+                    app:textCenter="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:layout_marginTop="6dp"
+                app:layout_flexBasisPercent="30%">
+
+                <com.bulingzhuang.deadline.views.ui.CircleProgressView
+                    android:id="@+id/cpv_other"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:alpha="0"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    app:circleColorE="@color/deeporange600"
+                    app:circleColorS="@color/yellow600"
+                    app:currentNum="328"
+                    app:fillNum="360"
+                    app:icon="@mipmap/type_other"
+                    app:textCenter="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:layout_marginTop="6dp"
+                app:layout_flexBasisPercent="35%">
+
+                <com.bulingzhuang.deadline.views.ui.CircleProgressView
+                    android:id="@+id/cpv_replace"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:alpha="0"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    app:centerText="重置"
+                    app:circleColorE="@color/colorPrimary"
+                    app:circleColorS="@color/colorPrimary"
+                    app:currentNum="328"
+                    app:fillNum="360"
+                    app:textCenter="true"/>
+            </RelativeLayout>
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <!--<View-->
+        <!--android:id="@+id/v_defaultColor"-->
+        <!--style="@style/view_horizontal_margin_16"/>-->
+    </LinearLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/setting_accurateUpdate"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"/>
-
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/cb_accurateUpdate"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:checked="false"/>
-    </RelativeLayout>
-
-    <View
-        style="@style/view_horizontal_margin_16"/>
-
-    <RelativeLayout
-        android:id="@+id/rl_defaultColor"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="默认颜色"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"/>
-
-        <ImageView
-            android:id="@+id/iv_defaultColor"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_keyboard_arrow_up_black_24dp"/>
-    </RelativeLayout>
-
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/fl_defaultColor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="6dp"
+        android:id="@+id/rl_search_gen"
         android:visibility="gone"
-        app:alignContent="flex_start"
-        app:alignItems="flex_start"
-        app:flexDirection="row"
-        app:flexWrap="wrap"
-        app:showDivider="middle">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/abl_bar"
+        android:background="@android:color/white">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_search"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:layout_marginTop="6dp"
-            app:layout_flexBasisPercent="35%">
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <com.bulingzhuang.deadline.views.ui.CircleProgressView
-                android:id="@+id/cpv_work"
-                android:layout_width="50dp"
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:alpha="0"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                app:circleColorE="@color/lime600"
-                app:circleColorS="@color/teal600"
-                app:currentNum="328"
-                app:fillNum="360"
-                app:icon="@mipmap/type_work"
-                app:textCenter="true"/>
-        </RelativeLayout>
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:hint="搜索城市"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textColorHint="@color/colorPrimaryAlphaDark"
+                android:textSize="14sp"/>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:layout_marginTop="6dp"
-            app:layout_flexBasisPercent="30%">
-
-            <com.bulingzhuang.deadline.views.ui.CircleProgressView
-                android:id="@+id/cpv_festival"
-                android:layout_width="50dp"
+            <TextView
+                android:id="@+id/btn_search"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:alpha="0"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                app:circleColorE="@color/teal600"
-                app:circleColorS="@color/blue600"
-                app:currentNum="328"
-                app:fillNum="360"
-                app:icon="@mipmap/type_festival"
-                app:textCenter="true"/>
-        </RelativeLayout>
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:paddingEnd="16dp"
+                android:paddingStart="20dp"
+                android:text="取消"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"/>
+        </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:layout_marginTop="6dp"
-            app:layout_flexBasisPercent="35%">
+        <View
+            android:id="@+id/v_line"
+            style="@style/view_horizontal"
+            android:background="@color/city_search_gray"
+            android:layout_above="@id/ll_search"/>
 
-            <com.bulingzhuang.deadline.views.ui.CircleProgressView
-                android:id="@+id/cpv_birthday"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:alpha="0"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                app:circleColorE="@color/blue600"
-                app:circleColorS="@color/purple600"
-                app:currentNum="328"
-                app:fillNum="360"
-                app:icon="@mipmap/type_birthday"
-                app:textCenter="true"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:layout_marginTop="6dp"
-            app:layout_flexBasisPercent="35%">
-
-            <com.bulingzhuang.deadline.views.ui.CircleProgressView
-                android:id="@+id/cpv_family"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:alpha="0"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                app:circleColorE="@color/purple600"
-                app:circleColorS="@color/deeporange600"
-                app:currentNum="328"
-                app:fillNum="360"
-                app:icon="@mipmap/type_family"
-                app:textCenter="true"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:layout_marginTop="6dp"
-            app:layout_flexBasisPercent="30%">
-
-            <com.bulingzhuang.deadline.views.ui.CircleProgressView
-                android:id="@+id/cpv_other"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:alpha="0"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                app:circleColorE="@color/deeporange600"
-                app:circleColorS="@color/yellow600"
-                app:currentNum="328"
-                app:fillNum="360"
-                app:icon="@mipmap/type_other"
-                app:textCenter="true"/>
-        </RelativeLayout>
-    </com.google.android.flexbox.FlexboxLayout>
-
-    <View style="@style/view_horizontal_margin_16"
-        android:id="@+id/v_defaultColor"/>
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_above="@id/v_line"/>
+    </RelativeLayout>
+</RelativeLayout>

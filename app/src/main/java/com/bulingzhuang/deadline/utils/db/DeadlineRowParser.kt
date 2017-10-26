@@ -20,12 +20,14 @@ class DeadlineRowParser : RowParser<DeadlineModel> {
             DeadlineModel.Type.FESTIVAL.typeName -> {
                 DeadlineModel.Type.FESTIVAL
             }
+            DeadlineModel.Type.FAMILY.typeName -> {
+                DeadlineModel.Type.FAMILY
+            }
             else -> {
                 DeadlineModel.Type.OTHER
             }
         }
         //        showLogE("_id=${columns[0]},$deadlineModel")
-        return DeadlineModel(columns[0] as Long, columns[1] as String, type, columns[3] as Long, columns[4] as Long,
-                columns[5] as String, columns[6] as String, columns[7] as String, columns[8] as String)
+        return DeadlineModel(columns[0] as Long, columns[1] as String, type, columns[3] as Long, columns[4] as Long)
     }
 }

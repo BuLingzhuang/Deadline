@@ -6,7 +6,9 @@
     <color name="colorPrimaryAlphaDark">#aa37474f</color>
     <color name="colorPrimaryDark">#263238</color>
     <color name="colorAccent">#FF4081</color>
-    
+
+    <color name="city_search_gray">#eeeeee</color>
+
     <color name="invalid_gray">#c8c8c8</color>
 
     <!--资深原画推荐-->

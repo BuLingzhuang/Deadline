@@ -6,6 +6,7 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -28,11 +29,12 @@ class CircleProgressView : View {
     private var mDensity: Float = 0f//屏幕密度
     private var mCircleRatio: Float = 0f//圆环宽度占比
     private var mIconId = 0 //中心图标id
+    private var mCenterText: String? = null //中心文字
+    private var yOffset: Float //中心文字Y轴居中偏移量
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initAttr(context, attrs)
-        init(context)
     }
 
     fun setData(currentNum: Int, fillNum: Int) {
@@ -70,10 +72,12 @@ class CircleProgressView : View {
 
     private val mCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mIconPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mCenterTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mCircleBGPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mCirclePath = Path()
     private val mCircleBGPath = Path()
     private var mBitmapShader: BitmapShader? = null
+
 
     /**
      * 静态
@@ -88,11 +92,16 @@ class CircleProgressView : View {
     /**
      * 初始化
      */
-    private fun init(context: Context) {
+    init {
         mDensity = context.resources.displayMetrics.density
         mCirclePaint.strokeCap = Paint.Cap.ROUND
         mCirclePaint.style = Paint.Style.STROKE
         mCircleBGPaint.style = Paint.Style.STROKE
+        //使用默认颜色，13号字
+        mCenterTextPaint.color = ContextCompat.getColor(context, R.color.colorPrimary)
+        mCenterTextPaint.textSize = mDensity * 13
+        val fontMetrics = mCenterTextPaint.fontMetrics
+        yOffset = -(fontMetrics.ascent + fontMetrics.descent) / 2f
     }
 
     /**
@@ -130,6 +139,7 @@ class CircleProgressView : View {
         if (iconId != R.mipmap.ic_launcher_foreground) {
             mIconId = iconId
         }
+        mCenterText = typedArray.getString(R.styleable.CircleProgressView_centerText)
 
         val textCenter = typedArray.getBoolean(R.styleable.CircleProgressView_textCenter, false)
         mCircleRatio = if (textCenter) {
@@ -201,7 +211,7 @@ class CircleProgressView : View {
             canvas.rotate(-sBgGradualRotate, width / 2f, height / 2f)
             canvas.drawPath(mCircleBGPath, mCircleBGPaint)
             canvas.drawPath(mCirclePath, mCirclePaint)
-            if (mIconId != 0) {
+            if (mIconId != 0 && TextUtils.isEmpty(mCenterText)) {
                 canvas.translate(width.toFloat() * (1 - sIconRatio) / 2, height.toFloat() * (1 - sIconRatio) / 2)
                 canvas.drawRect(0f, 0f, width.toFloat() * sIconRatio, height.toFloat() * sIconRatio, mIconPaint)
                 canvas.translate(-width.toFloat() * (1 - sIconRatio) / 2, -height.toFloat() * (1 - sIconRatio) / 2)
@@ -209,6 +219,9 @@ class CircleProgressView : View {
             canvas.rotate(sBgGradualRotate, width / 2f, height / 2f)
             canvas.restore()
 
+            if (!TextUtils.isEmpty(mCenterText)) {//绘制中心文字
+                canvas.drawText(mCenterText, (width.toFloat() - mCenterTextPaint.measureText(mCenterText)) / 2, (top + bottom) / 2 + yOffset, mCenterTextPaint)
+            }
         }
     }
 

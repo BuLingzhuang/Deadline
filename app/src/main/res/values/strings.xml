@@ -7,4 +7,6 @@
     <string name="action_feelingLucky">Feeling Lucky</string>
     <string name="action_about">About</string>
     <string name="add">add</string>
+    <string name="setting_default_color">Default Color</string>
+    <string name="setting_default_city">DefaultCity(weather)</string>
 </resources>

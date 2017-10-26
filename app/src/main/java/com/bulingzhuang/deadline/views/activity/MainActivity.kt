@@ -1,8 +1,7 @@
-package com.bulingzhuang.deadline.views.activitys
+package com.bulingzhuang.deadline.views.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +12,8 @@ import com.bulingzhuang.deadline.bean.WeatherModel
 import com.bulingzhuang.deadline.impl.presenters.MainPresenterImpl
 import com.bulingzhuang.deadline.interfaces.presenters.MainPresenter
 import com.bulingzhuang.deadline.interfaces.views.MainView
+import com.bulingzhuang.deadline.utils.Constants
+import com.bulingzhuang.deadline.utils.SharePreferencesUtil
 import com.bulingzhuang.deadline.utils.showSnakeBar
 import com.bulingzhuang.deadline.utils.showSnakeBarWithAction
 
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun onResume() {
         super.onResume()
-        mPresenter.getWeatherData(this)
+        mPresenter.getWeatherData(this,SharePreferencesUtil.getString(Constants.SP_WEATHER_CITY))
         mPresenter.checkAdapter()
     }
 
@@ -135,17 +136,8 @@ class MainActivity : AppCompatActivity(), MainView {
      */
     fun showSnakeBarWithAction(str: String, removeData: DeadlineModel) {
         showSnakeBarWithAction(str, cl_gen, "撤销", View.OnClickListener {
-            val isGradient = when (removeData.isGradient) {
-                "true" -> {
-                    true
-                }
-                else -> {
-                    false
-                }
-            }
             mPresenter.insertItem(this, removeData.content, removeData.type.typeName,
-                    removeData.startTime, removeData.endTime, removeData.textColor,
-                    removeData.startColor, removeData.endColor, isGradient)
+                    removeData.startTime, removeData.endTime)
         })
     }
 

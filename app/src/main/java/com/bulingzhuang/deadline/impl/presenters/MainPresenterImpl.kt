@@ -13,9 +13,10 @@ import com.bulingzhuang.deadline.utils.*
 import com.bulingzhuang.deadline.utils.db.DBUtil
 import com.bulingzhuang.deadline.utils.db.DeadlineRowParser
 import com.bulingzhuang.deadline.utils.net.ApiCallback
-import com.bulingzhuang.deadline.views.adapters.DeadlineModelAdapter
-import com.bulingzhuang.deadline.views.fragments.AddDialogFragment
+import com.bulingzhuang.deadline.views.adapter.DeadlineModelAdapter
+import com.bulingzhuang.deadline.views.fragment.AddDialogFragment
 import com.google.gson.Gson
+import io.reactivex.annotations.Nullable
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
@@ -35,8 +36,8 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
     /**
      * 获取天气数据
      */
-    override fun getWeatherData(context: Context) {
-        val lastRefreshDataStr = SharePreferencesUtil.getString(Constants.MAIN_LAST_WEATHER_REFRESH_DATA)
+    override fun getWeatherData(context: Context,@Nullable city:String) {
+        val lastRefreshDataStr = SharePreferencesUtil.getString(Constants.SP_MAIN_LAST_WEATHER_REFRESH_DATA)
         showLogE("上次一访问天气接口数据：$lastRefreshDataStr")
         var refresh = true
         val gson = Gson()
@@ -64,15 +65,11 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
                     data.createTime = System.currentTimeMillis()
                     val jsonData = gson.toJson(data)
                     showLogE("保存了天气数据：$jsonData")
-                    SharePreferencesUtil.setValue(context, Constants.MAIN_LAST_WEATHER_REFRESH_DATA, jsonData)
+                    SharePreferencesUtil.setValue(context, Constants.SP_MAIN_LAST_WEATHER_REFRESH_DATA, jsonData)
                 }
 
-            })
+            },city)
         }
-    }
-
-    enum class DialogType(val typeName: String) {
-        ADD("新增"), EDIT("编辑")
     }
 
     /**
@@ -89,24 +86,16 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
     /**
      * 添加一条数据
      */
-    override fun insertItem(context: Context, content: String, typeName: String, startTime: Long, endTime: Long, textColor: String, startColor: String, endColor: String, isGradient: Boolean) {
-        showLogE("内容=$content，类型=$typeName，开始时间=$startTime，结束时间=$endTime，文字颜色=$textColor，开始颜色=$startColor，结束颜色=$endColor，使用渐变=$isGradient")
-        val isGradientStr = if (isGradient) {
-            "true"
-        } else {
-            "false"
-        }
+    override fun insertItem(context: Context, content: String, typeName: String, startTime: Long, endTime: Long) {
+        showLogE("内容=$content，类型=$typeName，开始时间=$startTime，结束时间=$endTime")
+
         context.database.use {
             //添加数据
             insert(DBUtil.TABLE_NAME_deadline,
                     DBUtil.DEADLINE_content to content,
                     DBUtil.DEADLINE_type to typeName,
                     DBUtil.DEADLINE_startTime to startTime,
-                    DBUtil.DEADLINE_endTime to endTime,
-                    DBUtil.DEADLINE_startColor to startColor,
-                    DBUtil.DEADLINE_endColor to endColor,
-                    DBUtil.DEADLINE_textColor to textColor,
-                    DBUtil.DEADLINE_isGradient to isGradientStr)
+                    DBUtil.DEADLINE_endTime to endTime)
 
             val whereArgs = select(DBUtil.TABLE_NAME_deadline).whereArgs("_id > {maxId}", "maxId" to mAdapter.getMaxId())
             val parseList = whereArgs.parseList(DeadlineRowParser())
@@ -164,5 +153,6 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
     override fun doBeforeDestroy() {
         mMainInteractor.doBeforeDestroy()
     }
+
 
 }

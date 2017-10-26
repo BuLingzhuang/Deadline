@@ -1,4 +1,4 @@
-package com.bulingzhuang.deadline.views.adapters
+package com.bulingzhuang.deadline.views.adapter
 
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
@@ -10,11 +10,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.bulingzhuang.deadline.R
 import com.bulingzhuang.deadline.bean.DeadlineModel
+import com.bulingzhuang.deadline.bean.TypeColorModel
+import com.bulingzhuang.deadline.utils.Constants
+import com.bulingzhuang.deadline.utils.SharePreferencesUtil
 import com.bulingzhuang.deadline.utils.Tools
 import com.bulingzhuang.deadline.utils.showLogE
-import com.bulingzhuang.deadline.views.activitys.MainActivity
-import com.bulingzhuang.deadline.views.fragments.ShowDialogFragment
+import com.bulingzhuang.deadline.views.activity.MainActivity
+import com.bulingzhuang.deadline.views.fragment.ShowDialogFragment
 import com.bulingzhuang.deadline.views.ui.CircleProgressView
+import com.google.gson.Gson
 import org.jetbrains.annotations.NotNull
 import java.util.*
 import kotlin.collections.ArrayList
@@ -33,12 +37,113 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
 
     private val mDataList: MutableList<DeadlineModel>
 
+    private var lastJson: String
+    private lateinit var colorWork: TypeColorModel.ColorModel
+    private lateinit var colorFestival: TypeColorModel.ColorModel
+    private lateinit var colorBirthday: TypeColorModel.ColorModel
+    private lateinit var colorFamily: TypeColorModel.ColorModel
+    private lateinit var colorOther: TypeColorModel.ColorModel
+
     init {
         mDataList = ArrayList()
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = refreshTime
         mHourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
         mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+        lastJson = SharePreferencesUtil.getString(Constants.SP_DEFAULT_COLOR_DATA)
+        if (lastJson.isNotEmpty()) {
+            val colorModel = Gson().fromJson(lastJson, TypeColorModel::class.java)
+            val typeList = colorModel.typeList
+            typeList.forEach {
+                when (it.typeName) {
+                    DeadlineModel.Type.WORK.typeName -> {
+                        colorWork = it
+                    }
+                    DeadlineModel.Type.FESTIVAL.typeName -> {
+                        colorFestival = it
+                    }
+                    DeadlineModel.Type.BIRTHDAY.typeName -> {
+                        colorBirthday = it
+                    }
+                    DeadlineModel.Type.FAMILY.typeName -> {
+                        colorFamily = it
+                    }
+                    DeadlineModel.Type.OTHER.typeName -> {
+                        colorOther = it
+                    }
+                    else -> {
+                        colorWork = TypeColorModel.ColorModel(DeadlineModel.Type.WORK.typeName, true, "#00897b", "#c0ca33")
+                        colorFestival = TypeColorModel.ColorModel(DeadlineModel.Type.FESTIVAL.typeName, true, "#4e6cef", "#00897b")
+                        colorBirthday = TypeColorModel.ColorModel(DeadlineModel.Type.BIRTHDAY.typeName, true, "#8e24aa", "#4e6cef")
+                        colorFamily = TypeColorModel.ColorModel(DeadlineModel.Type.FAMILY.typeName, true, "#f4511e", "#8e24aa")
+                        colorOther = TypeColorModel.ColorModel(DeadlineModel.Type.OTHER.typeName, true, "#ffb300", "#dd191d")
+                    }
+                }
+            }
+        } else {
+            colorWork = TypeColorModel.ColorModel(DeadlineModel.Type.WORK.typeName, true, "#00897b", "#c0ca33")
+            colorFestival = TypeColorModel.ColorModel(DeadlineModel.Type.FESTIVAL.typeName, true, "#4e6cef", "#00897b")
+            colorBirthday = TypeColorModel.ColorModel(DeadlineModel.Type.BIRTHDAY.typeName, true, "#8e24aa", "#4e6cef")
+            colorFamily = TypeColorModel.ColorModel(DeadlineModel.Type.FAMILY.typeName, true, "#f4511e", "#8e24aa")
+            colorOther = TypeColorModel.ColorModel(DeadlineModel.Type.OTHER.typeName, true, "#ffb300", "#dd191d")
+        }
+    }
+
+    private fun compareColorModel() {
+        val currentJson = SharePreferencesUtil.getString(Constants.SP_DEFAULT_COLOR_DATA)
+        if (lastJson != currentJson) {
+            lastJson = currentJson
+            if (currentJson.isNotEmpty()) {
+                val changeTypeList = ArrayList<String>()
+                val colorModel = Gson().fromJson(currentJson, TypeColorModel::class.java)
+                val typeList = colorModel.typeList
+                typeList.forEach {
+                    when (it.typeName) {
+                        DeadlineModel.Type.WORK.typeName -> {
+                            if (!Tools.compareColor(colorWork, it)) {
+                                colorWork = it
+                                changeTypeList.add(it.typeName)
+                            }
+                        }
+                        DeadlineModel.Type.FESTIVAL.typeName -> {
+                            if (!Tools.compareColor(colorFestival, it)) {
+                                colorFestival = it
+                                changeTypeList.add(it.typeName)
+                            }
+                        }
+                        DeadlineModel.Type.BIRTHDAY.typeName -> {
+                            if (!Tools.compareColor(colorBirthday, it)) {
+                                colorBirthday = it
+                                changeTypeList.add(it.typeName)
+                            }
+                        }
+                        DeadlineModel.Type.FAMILY.typeName -> {
+                            if (!Tools.compareColor(colorFamily, it)) {
+                                colorFamily = it
+                                changeTypeList.add(it.typeName)
+                            }
+                        }
+                        DeadlineModel.Type.OTHER.typeName -> {
+                            if (!Tools.compareColor(colorOther, it)) {
+                                colorOther = it
+                                changeTypeList.add(it.typeName)
+                            }
+                        }
+                    }
+                }
+                if (changeTypeList.size > 0) {
+                    changeTypeList.forEach {
+                        for (position in mDataList.indices) {
+                            val model = mDataList[position]
+                            if (model.type.typeName == it) {
+                                notifyItemChanged(position)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -67,6 +172,9 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
                 notifyDataSetChanged()
             }
         }
+
+        //检查颜色变更
+        compareColorModel()
     }
 
     /**
@@ -87,7 +195,7 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
         }
         mInvalidSize = invalidSize
         if (mDataList.size > 0) {
-            mDataList.add(DeadlineModel(-1, "", DeadlineModel.Type.OTHER, 0, 0, "", "", "", "", DeadlineModel.ShowStatus.VALID))
+            mDataList.add(DeadlineModel(-1, "", DeadlineModel.Type.OTHER, 0, 0, DeadlineModel.ShowStatus.VALID))
         }
         mDataList.addAll(validList)
         Collections.reverse(mDataList)
@@ -130,6 +238,23 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         val item = mDataList[position]
+        val itemColor = when (item.type) {
+            DeadlineModel.Type.WORK -> {
+                colorWork
+            }
+            DeadlineModel.Type.FESTIVAL -> {
+                colorFestival
+            }
+            DeadlineModel.Type.BIRTHDAY -> {
+                colorBirthday
+            }
+            DeadlineModel.Type.FAMILY -> {
+                colorFamily
+            }
+            DeadlineModel.Type.OTHER -> {
+                colorOther
+            }
+        }
         showLogE("数据：$item")
         when (holder?.itemViewType) {
             R.layout.adapter_main_open -> {
@@ -144,17 +269,14 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
                     }
                     openHolder.mTvDay.text = String.format(Locale.CHINA, "%dd", rDay)
                     openHolder.mTvHour.text = String.format(Locale.CHINA, "%dh", rHour)
-                    openHolder.mTvContent.setTextColor(Color.parseColor(item.textColor))
+                    openHolder.mTvContent.setTextColor(Color.parseColor(itemColor.contentColor))
                     openHolder.mTvEndTime.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-                    when (item.isGradient) {
-                        "true" -> {
-                            openHolder.mCpvDay.setColor(item.startColor,item.endColor)
-                            openHolder.mCpvHour.setColor(item.startColor,item.endColor)
-                        }
-                        else -> {
-                            openHolder.mCpvDay.setColor(item.startColor)
-                            openHolder.mCpvHour.setColor(item.startColor)
-                        }
+                    if (itemColor.isGradient) {
+                        openHolder.mCpvDay.setColor(itemColor.contentColor, itemColor.endColor)
+                        openHolder.mCpvHour.setColor(itemColor.contentColor, itemColor.endColor)
+                    } else {
+                        openHolder.mCpvDay.setColor(itemColor.contentColor)
+                        openHolder.mCpvHour.setColor(itemColor.contentColor)
                     }
                 } else {
                     openHolder.mTvDay.text = ""

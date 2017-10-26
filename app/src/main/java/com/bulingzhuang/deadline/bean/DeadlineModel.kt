@@ -12,10 +12,6 @@ class DeadlineModel constructor(var _id: Long,
                                 var type: Type,
                                 var startTime: Long,
                                 var endTime: Long,
-                                var startColor: String,
-                                var endColor: String,
-                                var textColor: String,
-                                var isGradient: String,
                                 var showStatus: ShowStatus = ShowStatus.OPEN) : Serializable {
     enum class Type(val typeName: String) {
         FESTIVAL("节日"),
@@ -30,7 +26,6 @@ class DeadlineModel constructor(var _id: Long,
     }
 
     override fun toString(): String {
-        return "_id=$_id,content=$content,type=${type.typeName},startTime=$startTime,endTime=$endTime," +
-                "Args_startColor=$startColor,endColor=$endColor,textColor=$textColor,isGradient=$isGradient"
+        return "_id=$_id,content=$content,type=${type.typeName},startTime=$startTime,endTime=$endTime"
     }
 }

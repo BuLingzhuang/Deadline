@@ -17,6 +17,6 @@ interface ApiStores {
 
 //    @GET("v3/weather/now.json?key={key}&location={location}&language={language}&unit={unit}")
     @GET("v3/weather/now.json")
-    fun loadWeather(@Query("key") key: String = "0dgqeyrbpaxdhejn", @Query("location") location: String = "上海",
+    fun loadWeather( @Query("location") location: String = "上海",@Query("key") key: String = "0dgqeyrbpaxdhejn",
                     @Query("language") language: String = "zh-Hans", @Query("unit") unit: String = "c"): Observable<WeatherModel>
 }

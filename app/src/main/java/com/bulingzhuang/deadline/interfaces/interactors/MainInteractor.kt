@@ -12,5 +12,5 @@ interface MainInteractor {
     /**
      * 访问网络获取天气数据
      */
-    fun getWeatherData(observer: BaseObserver<WeatherModel>)
+    fun getWeatherData(observer: BaseObserver<WeatherModel>,city:String)
 }

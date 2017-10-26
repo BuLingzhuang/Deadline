@@ -1,4 +1,4 @@
-package com.bulingzhuang.deadline.views.fragments
+package com.bulingzhuang.deadline.views.fragment
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -10,11 +10,10 @@ import android.view.View
 import android.widget.*
 import com.bulingzhuang.deadline.R
 import com.bulingzhuang.deadline.bean.DeadlineModel
-import com.bulingzhuang.deadline.utils.Tools
 import com.bulingzhuang.deadline.utils.Tools.formatMillis2Str
 import com.bulingzhuang.deadline.utils.Tools.switchStr
 import com.bulingzhuang.deadline.utils.showToast
-import com.bulingzhuang.deadline.views.activitys.MainActivity
+import com.bulingzhuang.deadline.views.activity.MainActivity
 import org.jetbrains.annotations.NotNull
 import java.util.*
 
@@ -57,19 +56,11 @@ class AddDialogFragment : DialogFragment() {
     private lateinit var hourArray: Array<String>
     private lateinit var mTvStartDate: TextView
     private lateinit var mTvEndDate: TextView
-    private lateinit var mBtnColor: ImageView
     private lateinit var mEtContent: EditText
     private lateinit var mSpStartHour: Spinner
     private lateinit var mSpEndHour: Spinner
     private lateinit var mSpType: Spinner
     private var mLocalData: DeadlineModel? = null
-
-    //三个颜色值
-    private var mContentColor: String = "#dd191d"
-    private var mStartColor: String = "#dd191d"
-    private var mEndColor: String = "#ffb300"
-    //是否使用渐变色
-    private var mIsGradient: Boolean = true
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val arguments = arguments
@@ -163,10 +154,6 @@ class AddDialogFragment : DialogFragment() {
                     mTvEndDate.text = endPair.first
                     mSpEndHour.setSelection(endPair.second)
 
-                    mContentColor = mLocalData!!.textColor
-                    mStartColor = mLocalData!!.startColor
-                    mEndColor = mLocalData!!.endColor
-
                     val type = mLocalData!!.type
                     val index = typeArray.indexOfFirst { it == type.typeName }
                     if (index >= 0) {
@@ -192,7 +179,7 @@ class AddDialogFragment : DialogFragment() {
                     if (startDate.isNotEmpty() && mStartHour.isNotEmpty() && endDate.isNotEmpty() && mEndHour.isNotEmpty()) {
                         val startMillis = formatStr2Millis(startDate, mStartHour)
                         val endMillis = formatStr2Millis(endDate, mEndHour)
-                        (activity as MainActivity).mPresenter.insertItem(context, mEtContent.text.toString(), mTypeStr, startMillis, endMillis, mContentColor, mStartColor, mEndColor, mIsGradient)
+                        (activity as MainActivity).mPresenter.insertItem(context, mEtContent.text.toString(), mTypeStr, startMillis, endMillis)
                     }
                 }
             }
@@ -228,16 +215,4 @@ class AddDialogFragment : DialogFragment() {
         }
 
     }
-
-    /**
-     * 设置颜色
-     */
-    fun setColorData(contentColor: String, startColor: String, endColor: String, isGradient: Boolean) {
-        mBtnColor.setImageResource(R.drawable.ic_color_lens_black_24dp)
-        mContentColor = contentColor
-        mStartColor = startColor
-        mEndColor = endColor
-        mIsGradient = isGradient
-    }
-
 }

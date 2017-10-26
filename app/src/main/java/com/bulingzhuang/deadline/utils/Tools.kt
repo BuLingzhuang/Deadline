@@ -1,5 +1,6 @@
 package com.bulingzhuang.deadline.utils
 
+import com.bulingzhuang.deadline.bean.TypeColorModel
 import java.util.*
 
 /**
@@ -49,5 +50,21 @@ object Tools {
         } else {
             "-" + result.toString()
         }
+    }
+
+    /**
+     * 比较颜色模块是否有样式变更
+     */
+     fun compareColor(lastModel: TypeColorModel.ColorModel, currentModel: TypeColorModel.ColorModel): Boolean {
+        if (lastModel.isGradient != currentModel.isGradient) {
+            return false
+        }
+        if (lastModel.contentColor != currentModel.contentColor) {
+            return false
+        }
+        if (lastModel.endColor != currentModel.endColor) {
+            return false
+        }
+        return true
     }
 }

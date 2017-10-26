@@ -8,4 +8,6 @@
     <string name="action_feelingLucky">试试手气</string>
     <string name="action_about">关于</string>
     <string name="add">添加</string>
+    <string name="setting_default_color">默认颜色</string>
+    <string name="setting_default_city">默认城市(天气)</string>
 </resources>

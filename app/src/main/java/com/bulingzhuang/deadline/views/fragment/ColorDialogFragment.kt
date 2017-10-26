@@ -1,4 +1,4 @@
-package com.bulingzhuang.deadline.views.fragments
+package com.bulingzhuang.deadline.views.fragment
 
 import android.animation.Animator
 import android.app.Dialog
@@ -16,7 +16,7 @@ import android.widget.Switch
 import android.widget.TextView
 import com.bulingzhuang.deadline.R
 import com.bulingzhuang.deadline.bean.TypeColorModel
-import com.bulingzhuang.deadline.views.activitys.SettingActivity
+import com.bulingzhuang.deadline.views.activity.SettingActivity
 import com.bulingzhuang.deadline.views.ui.ColorRadioGroup
 
 /**
@@ -147,7 +147,7 @@ class ColorDialogFragment : DialogFragment() {
         builder.setPositiveButton("确定", { _: DialogInterface, _: Int ->
             run {
                 if (activity is SettingActivity) {
-                    (activity as SettingActivity).setDefaultColor(mData)
+                    (activity as SettingActivity).setDefaultColor(mData,0)
                 }
             }
         })

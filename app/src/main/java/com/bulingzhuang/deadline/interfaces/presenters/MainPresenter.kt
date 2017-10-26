@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import com.bulingzhuang.deadline.bean.DeadlineModel
+import io.reactivex.annotations.Nullable
 
 /**
  * Created by bulingzhuang
@@ -14,7 +15,7 @@ interface MainPresenter {
     /**
      * 获取天气数据
      */
-    fun getWeatherData(context: Context)
+    fun getWeatherData(context: Context, @Nullable city: String)
 
     /**
      * 初始化Adapter
@@ -34,7 +35,7 @@ interface MainPresenter {
     /**
      * 添加一条数据
      */
-    fun insertItem(context: Context, content: String, typeName: String, startTime: Long, endTime: Long, textColor: String, startColor: String, endColor: String, isGradient: Boolean)
+    fun insertItem(context: Context, content: String, typeName: String, startTime: Long, endTime: Long)
 
     /**
      * 删除一条数据

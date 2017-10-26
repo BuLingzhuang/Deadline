@@ -1,4 +1,4 @@
-package com.bulingzhuang.deadline.views.fragments
+package com.bulingzhuang.deadline.views.fragment
 
 import android.app.DatePickerDialog
 import android.app.Dialog
