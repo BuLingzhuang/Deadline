@@ -19,4 +19,8 @@
     <declare-styleable name="ColorRadioGroup">
         <attr name="entries" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="GrayQuickTipsView">
+        <attr name="historyIcon" format="reference"/>
+    </declare-styleable>
 </resources>

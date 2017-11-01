@@ -11,4 +11,5 @@ object Constants {
     val SP_MAIN_LAST_WEATHER_REFRESH_DATA = "sp_main_last_weather_refresh_time"
     val SP_DEFAULT_COLOR_DATA = "sp_default_color_time"
     val SP_WEATHER_CITY = "sp_weather_city"
+    val SP_HISTORY_WEATHER_CITY = "sp_history_weather_city"
 }

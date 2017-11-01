@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context="com.bulingzhuang.deadline.views.activity.SettingActivity">
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/abl_bar"
         android:layout_width="match_parent"
@@ -33,13 +32,13 @@
                 android:layout_marginStart="60dp"
                 android:text="@string/action_settings"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"/>
+                android:textSize="17sp"/>
 
             <RelativeLayout
                 android:id="@+id/rl_back"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
-                android:padding="14dp">
+                android:padding="15dp">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -50,12 +49,12 @@
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
-
     <LinearLayout
+        android:layout_below="@id/abl_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/abl_bar"
         android:orientation="vertical">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -302,8 +301,8 @@
         android:id="@+id/rl_search_gen"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/abl_bar"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@android:color/white">
 
         <LinearLayout
@@ -321,8 +320,9 @@
                 android:layout_weight="1"
                 android:background="@android:color/white"
                 android:hint="搜索城市"
-                android:paddingEnd="16dp"
+                android:gravity="center_vertical"
                 android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:textColor="@color/colorPrimaryDark"
                 android:textColorHint="@color/colorPrimaryAlphaDark"
                 android:textSize="14sp"/>
@@ -346,10 +346,11 @@
             android:background="@color/city_search_gray"
             android:layout_above="@id/ll_search"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv"
+        <com.bulingzhuang.deadline.views.ui.GrayQuickTipsView
+            android:id="@+id/gqt"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
+            app:historyIcon="@mipmap/history"
             android:layout_above="@id/v_line"/>
     </RelativeLayout>
 </RelativeLayout>

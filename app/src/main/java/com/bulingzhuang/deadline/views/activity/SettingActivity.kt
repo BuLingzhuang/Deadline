@@ -42,6 +42,8 @@ class SettingActivity : AppCompatActivity() {
 
         mPresenter = SettingPresenterImpl()
 
+        mPresenter.initDefaultCityAdapter(this,gqt,et_search)
+
         rl_back.setOnClickListener {
             if (rl_search_gen.visibility == View.VISIBLE) {
                 showLogE("执行了")
@@ -135,6 +137,7 @@ class SettingActivity : AppCompatActivity() {
      */
     private fun hideSearchFunction() {
         //隐藏软键盘
+        et_search.setText("")
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(et_search.windowToken, 0)
         tv_title.text = resources.getString(R.string.action_settings)
@@ -143,11 +146,11 @@ class SettingActivity : AppCompatActivity() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        showLogE("有操作，action=${event?.action}，keyCode=$keyCode")
+//        showLogE("有操作，action=${event?.action}，keyCode=$keyCode")
         if (KeyEvent.KEYCODE_BACK == keyCode) {
-            showLogE("到第一层")
+//            showLogE("到第一层")
             if (rl_search_gen.visibility == View.VISIBLE) {
-                showLogE("执行了")
+//                showLogE("执行了")
                 hideSearchFunction()
                 return true
             }
