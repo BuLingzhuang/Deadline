@@ -33,10 +33,14 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
 
     private lateinit var mAdapter: DeadlineModelAdapter
 
+    //修改前默认天气城市
+    private var mLastWeatherCity:String = SharePreferencesUtil.getString(Constants.SP_WEATHER_CITY)
+
     /**
      * 获取天气数据
      */
     override fun getWeatherData(context: Context,@Nullable city:String) {
+
         val lastRefreshDataStr = SharePreferencesUtil.getString(Constants.SP_MAIN_LAST_WEATHER_REFRESH_DATA)
         showLogE("上次一访问天气接口数据：$lastRefreshDataStr")
         var refresh = true
@@ -44,9 +48,15 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
         if (lastRefreshDataStr.isNotEmpty()) {
             val data = gson.fromJson(lastRefreshDataStr, WeatherModel.ResultsBean.NowBean::class.java)
             if (System.currentTimeMillis() - data.createTime < 1000 * 60 * 30) {
-                showLogE("使用本地缓存的数据")
-                refresh = false
-                mMainView.updateWeather(data, false)
+                //要调用缓存天气数据时，校验是否修改了城市，是则继续走net刷新
+                val currentCity = SharePreferencesUtil.getString(Constants.SP_WEATHER_CITY)
+                if (mLastWeatherCity == currentCity) {
+                    showLogE("使用本地缓存的数据")
+                    refresh = false
+                    mMainView.updateWeather(data, false)
+                }else{
+                    mLastWeatherCity = currentCity
+                }
             }
         }
         if (refresh) {
