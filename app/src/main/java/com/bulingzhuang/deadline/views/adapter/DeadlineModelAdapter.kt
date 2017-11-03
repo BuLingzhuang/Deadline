@@ -203,7 +203,10 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
         notifyDataSetChanged()
     }
 
-    fun addData(@NotNull collection: Collection<DeadlineModel>) {
+    /**
+     * 添加一条数据
+     */
+    fun addItem(@NotNull collection: Collection<DeadlineModel>) {
         mDataList.addAll(0, collection)
         notifyItemRangeInserted(0, collection.size)
     }
@@ -211,18 +214,35 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
     /**
      * 删除一条数据
      */
-    fun delItem(_id: Long) {
+    fun delItem(_id: Long, showSnakeBar: Boolean) {
         for (position in mDataList.indices) {
             val item = mDataList[position]
             if (item._id == _id) {
                 if (mContext is MainActivity && mDataList.remove(item)) {
                     notifyItemRemoved(position)
-                    //失效数据不可撤销，只显示删除成功
-                    if (item.showStatus == DeadlineModel.ShowStatus.OPEN && refreshTime > item.endTime) {
-                        (mContext as MainActivity).showSnakeBar("删除成功")
-                    } else {
-                        (mContext as MainActivity).showSnakeBarWithAction("删除成功", item)
+                    if (showSnakeBar) {
+                        //失效数据不可撤销，只显示删除成功
+                        if (item.showStatus == DeadlineModel.ShowStatus.OPEN && refreshTime > item.endTime) {
+                            (mContext as MainActivity).showSnakeBar("删除成功")
+                        } else {
+                            (mContext as MainActivity).showSnakeBarWithAction("删除成功", item)
+                        }
                     }
+                    break
+                }
+            }
+        }
+    }
+
+    /**
+     * 编辑一条数据
+     */
+    fun editItem(@NotNull last_id: Long, @NotNull collection: Collection<DeadlineModel>) {
+        collection.forEach {
+            for (position in mDataList.indices) {
+                if (mDataList[position]._id == last_id) {
+                    mDataList[position] = it
+                    notifyItemChanged(position)
                     break
                 }
             }
@@ -259,8 +279,9 @@ class DeadlineModelAdapter(context: AppCompatActivity, private var refreshTime: 
         when (holder?.itemViewType) {
             R.layout.adapter_main_open -> {
                 val openHolder = holder as DeadlineModelAdapterViewHolderOpen
-                var (rDay, rHour) = Tools.computeTime(refreshTime, item.endTime)
+                var (rDay, rHour) = Tools.computeTime(Math.max(refreshTime,item.startTime), item.endTime)
                 val (rFillDay, _) = Tools.computeTime(item.startTime, item.endTime)
+                showLogE("rDay=$rDay,rHour=$rHour,rFillDay=$rFillDay")
                 openHolder.mCpvDay.setData(rDay, rFillDay)
                 openHolder.mCpvHour.setData(rHour, 24)
                 if (rDay >= 0 && rHour >= 0) {

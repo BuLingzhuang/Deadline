@@ -40,7 +40,12 @@ interface MainPresenter {
     /**
      * 删除一条数据
      */
-    fun delItem(context: Context, _id: Long)
+    fun delItem(context: Context, _id: Long,showSnakeBar:Boolean = true)
+
+    /**
+     * 编辑一条数据
+     */
+    fun editItem(context: Context,_id: Long,content: String,typeName: String,startTime: Long,endTime: Long)
 
     /**
      * 销毁页面操作

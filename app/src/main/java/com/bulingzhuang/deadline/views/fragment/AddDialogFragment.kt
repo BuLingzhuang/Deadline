@@ -161,10 +161,15 @@ class AddDialogFragment : DialogFragment() {
                         mTypeStr = type.typeName
                     }
                     mEtContent.setText(mLocalData!!.content)
+                    mEtContent.setSelection(mLocalData!!.content.length)
                 }
-                builder.setNeutralButton("删除", { _: DialogInterface, _: Int ->
-                    context.showToast("删除")
-                })
+                if (mLocalData != null){
+                    builder.setNeutralButton("删除", { _: DialogInterface, _: Int ->
+                        if (activity is MainActivity) {
+                            (activity as MainActivity).mPresenter.delItem(activity, mLocalData!!._id)
+                        }
+                    })
+                }
             }
         }
 
@@ -174,6 +179,9 @@ class AddDialogFragment : DialogFragment() {
         builder.setPositiveButton("确定", { _: DialogInterface, _: Int ->
             run {
                 if (activity is MainActivity) {
+                    if (mLocalData != null) {
+                        (activity as MainActivity).mPresenter.delItem(activity, mLocalData!!._id,false)
+                    }
                     val startDate = mTvStartDate.text.toString()
                     val endDate = mTvEndDate.text.toString()
                     if (startDate.isNotEmpty() && mStartHour.isNotEmpty() && endDate.isNotEmpty() && mEndHour.isNotEmpty()) {

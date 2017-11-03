@@ -20,7 +20,6 @@ import android.view.inputmethod.InputMethodManager
 import com.bulingzhuang.deadline.interfaces.views.SettingView
 import com.bulingzhuang.deadline.utils.showLogE
 
-
 class SettingActivity : AppCompatActivity(), SettingView {
 
     private lateinit var mPresenter: SettingPresenter

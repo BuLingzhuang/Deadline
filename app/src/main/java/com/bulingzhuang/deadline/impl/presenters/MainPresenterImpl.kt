@@ -113,14 +113,14 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
             for (model in parseList) {
                 showLogE(model.toString())
             }
-            mAdapter.addData(parseList)
+            mAdapter.addItem(parseList)
         }
     }
 
     /**
      * 删除一条数据
      */
-    override fun delItem(context: Context, _id: Long) {
+    override fun delItem(context: Context, _id: Long,showSnakeBar:Boolean) {
         showLogE("要删除id=$_id 对应的条目")
         context.database.use {
             //删除数据
@@ -128,7 +128,35 @@ class MainPresenterImpl(view: MainView) : MainPresenter {
                     "(${DBUtil.DEADLINE_id} = {${DBUtil.DEADLINE_id}})",
                     DBUtil.DEADLINE_id to _id)
         }
-        mAdapter.delItem(_id)
+        mAdapter.delItem(_id,showSnakeBar)
+    }
+
+    /**
+     * 编辑一条数据
+     */
+    override fun editItem(context: Context, _id: Long, content: String, typeName: String, startTime: Long, endTime: Long) {
+        showLogE("要编辑_id=$_id 对应的条目")
+        showLogE("内容=$content，类型=$typeName，开始时间=$startTime，结束时间=$endTime")
+        context.database.use {
+            //删除数据
+            delete(DBUtil.TABLE_NAME_deadline,
+                    "(${DBUtil.DEADLINE_id} = {${DBUtil.DEADLINE_id}})",
+                    DBUtil.DEADLINE_id to _id)
+            //添加数据
+            insert(DBUtil.TABLE_NAME_deadline,
+                    DBUtil.DEADLINE_content to content,
+                    DBUtil.DEADLINE_type to typeName,
+                    DBUtil.DEADLINE_startTime to startTime,
+                    DBUtil.DEADLINE_endTime to endTime)
+
+            val whereArgs = select(DBUtil.TABLE_NAME_deadline).whereArgs("_id > {maxId}", "maxId" to mAdapter.getMaxId())
+            val parseList = whereArgs.parseList(DeadlineRowParser())
+            showLogE("新增条目数据库查询结果：")
+            for (model in parseList) {
+                showLogE(model.toString())
+            }
+            mAdapter.editItem(_id,parseList)
+        }
     }
 
     /**

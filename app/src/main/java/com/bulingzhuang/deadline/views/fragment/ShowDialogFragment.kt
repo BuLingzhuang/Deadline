@@ -55,7 +55,7 @@ class ShowDialogFragment : DialogFragment() {
 
         mData = arguments.getSerializable("data") as DeadlineModel
 
-        var (rDay, rHour) = Tools.computeTime(currentMillis, mData.endTime)
+        var (rDay, rHour) = Tools.computeTime(Math.max(currentMillis, mData.startTime), mData.endTime)
         val (rFillDay, _) = Tools.computeTime(mData.startTime, mData.endTime)
 
         val data = SharePreferencesUtil.getString(Constants.SP_DEFAULT_COLOR_DATA)
@@ -72,8 +72,8 @@ class ShowDialogFragment : DialogFragment() {
             list
         }
 
-        var model:TypeColorModel.ColorModel?=null
-        colorList.filter { it.typeName ==mData.type.typeName }.forEach { model = it }
+        var model: TypeColorModel.ColorModel? = null
+        colorList.filter { it.typeName == mData.type.typeName }.forEach { model = it }
 
         cpvDay.setData(rDay, rFillDay)
         cpvHour.setData(rHour, 24)
@@ -88,10 +88,10 @@ class ShowDialogFragment : DialogFragment() {
             tvStartDate.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
             tvEndDate.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
             if (model != null) {
-                if (model!!.isGradient){
+                if (model!!.isGradient) {
                     cpvDay.setColor(model!!.contentColor, model!!.endColor)
                     cpvHour.setColor(model!!.contentColor, model!!.endColor)
-                }else{
+                } else {
                     cpvDay.setColor(model!!.contentColor)
                     cpvHour.setColor(model!!.contentColor)
                 }
@@ -108,8 +108,18 @@ class ShowDialogFragment : DialogFragment() {
         tvType.text = String.format(Locale.CHINA, "类型：%s", mData.type.typeName)
         val (startDay, startHour) = Tools.formatMillis2Str(mData.startTime)
         val (endDay, endHour) = Tools.formatMillis2Str(mData.endTime)
-        tvStartDate.text = String.format(Locale.CHINA, "%s %d时", startDay, startHour)
-        tvEndDate.text = String.format(Locale.CHINA, "%s %d时", endDay, endHour)
+        val startHourStr = if (startHour < 10) {
+            "  $startHour"
+        } else {
+            startHour.toString()
+        }
+        val endHourStr = if (endHour < 10) {
+            "  $endHour"
+        } else {
+            endHour.toString()
+        }
+        tvStartDate.text = String.format(Locale.CHINA, "%s %s时", startDay, startHourStr)
+        tvEndDate.text = String.format(Locale.CHINA, "%s %s时", endDay, endHourStr)
 
 
         builder.setView(inflate)
@@ -119,7 +129,9 @@ class ShowDialogFragment : DialogFragment() {
         })
         builder.setPositiveButton("编辑", { _: DialogInterface, _: Int ->
             run {
-
+                if (activity is MainActivity) {
+                    (activity as MainActivity).mPresenter.showDialog((activity as MainActivity), mData)
+                }
             }
         })
         builder.setNeutralButton("删除", { _: DialogInterface, _: Int ->
